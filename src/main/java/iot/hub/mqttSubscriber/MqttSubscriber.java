@@ -2,6 +2,7 @@ package iot.hub.mqttSubscriber;
 
 import iot.hub.model.House;
 import iot.hub.model.device.AbstractDevice;
+import iot.hub.model.device.actuator.RGBAStrip;
 import iot.hub.model.device.actuator.Relay;
 import iot.hub.service.MessagingService;
 import org.apache.tomcat.util.json.JSONParser;
@@ -31,6 +32,16 @@ public class MqttSubscriber implements CommandLineRunner {
                 if (payload.get("deviceType").toString().equals("Relay")) {
                     house.getRooms().get(payload.get("roomName").toString()).addDevice(
                             new Relay(
+                                    messagingService,
+                                    payload.get("deviceId").toString(),
+                                    payload.get("topic").toString()
+                            )
+                    );
+                }
+
+                if (payload.get("deviceType").toString().equals("RGBAStrip")) {
+                    house.getRooms().get(payload.get("roomName").toString()).addDevice(
+                            new RGBAStrip(
                                     messagingService,
                                     payload.get("deviceId").toString(),
                                     payload.get("topic").toString()

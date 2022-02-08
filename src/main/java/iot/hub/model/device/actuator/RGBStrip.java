@@ -1,6 +1,7 @@
 package iot.hub.model.device.actuator;
 
 import iot.hub.model.device.AbstractDevice;
+import iot.hub.service.MessagingService;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,6 +25,10 @@ public class RGBStrip extends AbstractDevice implements IActuator {
         public String toString() {
             return "{" + "\"red\":" + red + ", \"green\":" + green + ", \"blue\":" + blue + "}";
         }
+    }
+
+    public RGBStrip(MessagingService messagingService, String id, String topic) {
+        super(messagingService, id, topic);
     }
 
     @Override

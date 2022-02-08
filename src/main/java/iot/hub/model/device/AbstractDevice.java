@@ -1,6 +1,5 @@
 package iot.hub.model.device;
 
-import iot.hub.model.device.actuator.Relay;
 import iot.hub.service.MessagingService;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,4 +22,8 @@ public abstract class AbstractDevice {
     @Setter
     protected String topic;
 
+    @Override
+    public String toString() {
+        return "\"" + id + "\":" + "\"" + topic + "\"";
+    }
 }

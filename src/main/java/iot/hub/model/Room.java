@@ -4,7 +4,6 @@ import iot.hub.model.device.AbstractDevice;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
 public class Room {
@@ -18,7 +17,7 @@ public class Room {
     private String name;
 
     @Getter
-    private LinkedHashMap<String, AbstractDevice> abstractDevices = new LinkedHashMap<>();
+    private final LinkedHashMap<String, AbstractDevice> abstractDevices = new LinkedHashMap<>();
 
     public void addDevice(AbstractDevice abstractDevice) {
         abstractDevices.put(abstractDevice.getId(), abstractDevice);
@@ -28,4 +27,17 @@ public class Room {
         abstractDevices.remove(abstractDevice.getId());
     }
 
+    @Override
+    public String toString() {
+
+        StringBuilder ads = new StringBuilder();
+
+        for (AbstractDevice abstractDevice : abstractDevices.values()) {
+            ads.append(abstractDevice.toString()).append(",");
+        }
+
+        ads.deleteCharAt(ads.length() - 1);
+
+        return "\"" + name + "\": {" + ads + "}";
+    }
 }

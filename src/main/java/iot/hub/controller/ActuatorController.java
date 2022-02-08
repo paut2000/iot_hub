@@ -6,8 +6,6 @@ import iot.hub.model.device.actuator.RGBAStrip;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.LinkedHashMap;
-
 @RestController
 @RequestMapping("api")
 public class ActuatorController {
@@ -49,7 +47,7 @@ public class ActuatorController {
     }
 
     @GetMapping("/status/{roomName}/{deviceId}")
-    public LinkedHashMap<String, Object> getStatus(
+    public String getStatus(
             @PathVariable String roomName,
             @PathVariable String deviceId
     ) {
