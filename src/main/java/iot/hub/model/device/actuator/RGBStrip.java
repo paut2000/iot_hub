@@ -27,8 +27,12 @@ public class RGBStrip extends AbstractDevice implements IActuator {
         }
     }
 
-    public RGBStrip(MessagingService messagingService, String id, String topic) {
-        super(messagingService, id, topic);
+    public RGBStrip(MessagingService messagingService, String id, String topic, String type) {
+        super(messagingService, id, topic, type);
+    }
+
+    public RGBStrip(MessagingService messagingService) {
+        super(messagingService);
     }
 
     @Override

@@ -24,8 +24,12 @@ public class RGBAStrip extends RGBStrip {
         }
     }
 
-    public RGBAStrip(MessagingService messagingService, String id, String topic) {
-        super(messagingService, id, topic);
+    public RGBAStrip(MessagingService messagingService, String id, String topic, String type) {
+        super(messagingService, id, topic, type);
+    }
+
+    public RGBAStrip(MessagingService messagingService) {
+        super(messagingService);
     }
 
     public void setRGBA(RGBA rgba) {

@@ -14,7 +14,7 @@ public class HubConfig  implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        house.addRoom(new Room("bedroom"));
-        house.addRoom(new Room("kitchen"));
+        /*house.addRoom(new Room("bedroom"));
+        house.addRoom(new Room("kitchen"));*/
     }
 }

@@ -10,6 +10,10 @@ import lombok.Setter;
 @AllArgsConstructor
 public abstract class AbstractDevice {
 
+    public AbstractDevice(MessagingService messagingService) {
+        this.messagingService = messagingService;
+    }
+
     @Getter
     @Setter
     protected MessagingService messagingService;
@@ -22,8 +26,15 @@ public abstract class AbstractDevice {
     @Setter
     protected String topic;
 
+    @Getter
+    @Setter
+    protected String type;
+
     @Override
     public String toString() {
-        return "\"" + id + "\":" + "\"" + topic + "\"";
+        return "\"" + id + "\":" + "{" +
+                "\"topic\":\"" + topic + "\"," +
+                "\"type\":\"" + type + "\""
+                + "}";
     }
 }

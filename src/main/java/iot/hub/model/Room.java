@@ -36,7 +36,7 @@ public class Room {
             ads.append(abstractDevice.toString()).append(",");
         }
 
-        ads.deleteCharAt(ads.length() - 1);
+        if (ads.length() != 0) ads.deleteCharAt(ads.length() - 1);
 
         return "\"" + name + "\": {" + ads + "}";
     }

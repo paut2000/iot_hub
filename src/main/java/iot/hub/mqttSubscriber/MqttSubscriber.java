@@ -5,6 +5,7 @@ import iot.hub.model.device.AbstractDevice;
 import iot.hub.model.device.actuator.RGBAStrip;
 import iot.hub.model.device.actuator.Relay;
 import iot.hub.service.MessagingService;
+import iot.hub.service.factory.DeviceFactory;
 import org.apache.tomcat.util.json.JSONParser;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,34 +23,25 @@ public class MqttSubscriber implements CommandLineRunner {
     @Autowired
     private House house;
 
+    @Autowired
+    private DeviceFactory deviceFactory;
+
     @Override
     public void run(String... args) throws Exception {
         try {
+
             messagingService.subscribe("/device/new", (t, p) -> {
                 JSONParser jsonParser = new JSONParser(p.toString());
                 LinkedHashMap<String, Object> payload = jsonParser.parseObject();
 
-                if (payload.get("deviceType").toString().equals("Relay")) {
-                    house.getRooms().get(payload.get("roomName").toString()).addDevice(
-                            new Relay(
-                                    messagingService,
-                                    payload.get("deviceId").toString(),
-                                    payload.get("topic").toString()
-                            )
-                    );
-                }
+                AbstractDevice device = deviceFactory.createDevice(payload.get("deviceType").toString());
+                device.setId(payload.get("deviceId").toString());
+                device.setTopic(payload.get("topic").toString());
+                device.setType(payload.get("deviceType").toString());
 
-                if (payload.get("deviceType").toString().equals("RGBAStrip")) {
-                    house.getRooms().get(payload.get("roomName").toString()).addDevice(
-                            new RGBAStrip(
-                                    messagingService,
-                                    payload.get("deviceId").toString(),
-                                    payload.get("topic").toString()
-                            )
-                    );
-                }
+                house.getRooms().get(payload.get("roomName").toString()).addDevice(device);
 
-                System.out.println("ok :: topic:" + t + "payload" + p);
+                System.out.println("new :: topic:" + t + "payload" + p);
             });
 
         } catch (MqttException e) {

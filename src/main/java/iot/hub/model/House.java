@@ -28,7 +28,7 @@ public class House {
             rs.append(room.toString()).append(",");
         }
 
-        rs.deleteCharAt(rs.length() - 1);
+        if (rs.length() != 0) rs.deleteCharAt(rs.length() - 1);
 
         return "{" + "\"house\":{" + rs + "}}";
     }

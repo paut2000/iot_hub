@@ -8,11 +8,12 @@ import java.util.LinkedHashMap;
 
 public class Relay extends AbstractDevice implements IActuator {
 
-    public Relay() {
+    public Relay(MessagingService messagingService) {
+        super(messagingService);
     }
 
-    public Relay(MessagingService messagingService, String id, String topic) {
-        super(messagingService, id, topic);
+    public Relay(MessagingService messagingService, String id, String topic, String type) {
+        super(messagingService, id, topic, type);
     }
 
     @Override
