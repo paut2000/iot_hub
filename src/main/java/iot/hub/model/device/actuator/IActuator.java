@@ -4,8 +4,8 @@ import java.util.LinkedHashMap;
 
 public interface IActuator {
 
-    LinkedHashMap<String, Object> getStatus();
-    void switchStatus();
+    String getStatus();
+    void setStatus(LinkedHashMap<String, Object> payload);
     void enable();
     void disable();
 

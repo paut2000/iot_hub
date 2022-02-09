@@ -1,8 +1,13 @@
 package iot.hub.service;
 
+import iot.hub.model.device.AbstractDevice;
+import iot.hub.model.device.sensor.ISensor;
+import org.apache.tomcat.util.json.JSONParser;
 import org.eclipse.paho.client.mqttv3.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.LinkedHashMap;
 
 @Service
 public class MessagingService {
@@ -22,6 +27,18 @@ public class MessagingService {
 
     public void subscribe(final String topic, IMqttMessageListener iMqttMessageListener) throws MqttException, InterruptedException {
         mqttClient.subscribeWithResponse(topic, iMqttMessageListener);
+    }
+
+    public void subscribe(ISensor sensor) throws MqttException {
+
+        AbstractDevice device = (AbstractDevice) sensor;
+
+        mqttClient.subscribeWithResponse(device.getTopic(), (t, p) -> {
+            JSONParser jsonParser = new JSONParser(p.toString());
+            LinkedHashMap<String, Object> payload = jsonParser.parseObject();
+
+            sensor.setAllInfo(payload);
+        });
     }
 
 }

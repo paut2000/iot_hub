@@ -23,7 +23,6 @@ public class ActuatorController {
             IActuator actuator = (IActuator) (house.getRooms().get(roomName).getAbstractDevices().get(deviceId));
             if (action.equals("enable")) actuator.enable();
             if (action.equals("disable")) actuator.disable();
-            if (action.equals("switch")) actuator.switchStatus();
         } catch (Exception exception) {
             System.out.println(exception);
         }
