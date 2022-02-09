@@ -33,7 +33,7 @@ public class MessagingService {
 
         AbstractDevice device = (AbstractDevice) sensor;
 
-        mqttClient.subscribeWithResponse(device.getTopic(), (t, p) -> {
+        mqttClient.subscribeWithResponse(device.getFromDeviceTopic(), (t, p) -> {
             JSONParser jsonParser = new JSONParser(p.toString());
             LinkedHashMap<String, Object> payload = jsonParser.parseObject();
 

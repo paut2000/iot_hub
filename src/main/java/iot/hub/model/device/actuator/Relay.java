@@ -1,7 +1,6 @@
 package iot.hub.model.device.actuator;
 
 import iot.hub.model.device.AbstractDevice;
-import iot.hub.model.device.sensor.DHT;
 import iot.hub.service.MessagingService;
 import org.eclipse.paho.client.mqttv3.MqttException;
 
@@ -15,10 +14,6 @@ public class Relay extends AbstractDevice implements IActuator {
         super(messagingService);
     }
 
-    public Relay(MessagingService messagingService, String id, String topic, String type) {
-        super(messagingService, id, topic, type);
-    }
-
     @Override
     public String getStatus() {
         return this.status.toString();
@@ -26,13 +21,13 @@ public class Relay extends AbstractDevice implements IActuator {
 
     @Override
     public void setStatus(LinkedHashMap<String, Object> payload) {
-        this.status = (Boolean) payload.get("status");
+        this.status = Boolean.parseBoolean(payload.get("isOn").toString());
     }
 
     @Override
     public void enable() {
         try {
-            this.messagingService.publish(this.topic, "{\"action\":\"enable\"}", 2, false);
+            this.messagingService.publish(this.toDeviceTopic, "{\"action\":\"enable\"}", 2, false);
             this.status = true;
         } catch (MqttException e) {
 
@@ -42,7 +37,7 @@ public class Relay extends AbstractDevice implements IActuator {
     @Override
     public void disable() {
         try {
-            this.messagingService.publish(this.topic, "{\"action\":\"disable\"}", 2, false);
+            this.messagingService.publish(this.toDeviceTopic, "{\"action\":\"disable\"}", 2, false);
             this.status = false;
         } catch (MqttException e) {
 

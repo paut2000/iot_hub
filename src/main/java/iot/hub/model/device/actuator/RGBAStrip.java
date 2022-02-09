@@ -36,10 +36,6 @@ public class RGBAStrip extends AbstractDevice implements IActuator {
 
     private RGBA status = new RGBA();
 
-    public RGBAStrip(MessagingService messagingService, String id, String topic, String type) {
-        super(messagingService, id, topic, type);
-    }
-
     public RGBAStrip(MessagingService messagingService) {
         super(messagingService);
     }
@@ -51,16 +47,16 @@ public class RGBAStrip extends AbstractDevice implements IActuator {
 
     @Override
     public void setStatus(LinkedHashMap<String, Object> payload) {
-        this.status.setRed((Integer) payload.get("red"));
-        this.status.setGreen((Integer) payload.get("green"));
-        this.status.setBlue((Integer) payload.get("blue"));
-        this.status.setAlfa((Integer) payload.get("alfa"));
+        this.status.setRed(Integer.parseInt(payload.get("red").toString()));
+        this.status.setGreen(Integer.parseInt(payload.get("green").toString()));
+        this.status.setBlue(Integer.parseInt(payload.get("blue").toString()));
+        this.status.setAlfa(Integer.parseInt(payload.get("alfa").toString()));
     }
 
     @Override
     public void enable() {
         try {
-            this.messagingService.publish(this.topic, new RGBA(255,255,255, 255).toString(), 2, false);
+            this.messagingService.publish(this.toDeviceTopic, new RGBA(255,255,255, 255).toString(), 2, false);
             this.status.setRed(255);
             this.status.setGreen(255);
             this.status.setBlue(255);
@@ -73,7 +69,7 @@ public class RGBAStrip extends AbstractDevice implements IActuator {
     @Override
     public void disable() {
         try {
-            this.messagingService.publish(this.topic, new RGBA(0,0,0, 0).toString(), 2, false);
+            this.messagingService.publish(this.toDeviceTopic, new RGBA(0,0,0, 0).toString(), 2, false);
             this.status.setRed(0);
             this.status.setGreen(0);
             this.status.setBlue(0);
@@ -85,7 +81,7 @@ public class RGBAStrip extends AbstractDevice implements IActuator {
 
     public void setRGBA(RGBA rgba) {
         try {
-            this.messagingService.publish(this.topic, rgba.toString(), 2, false);
+            this.messagingService.publish(this.toDeviceTopic, rgba.toString(), 2, false);
             this.status.setRed(rgba.getRed());
             this.status.setGreen(rgba.getGreen());
             this.status.setBlue(rgba.getBlue());
