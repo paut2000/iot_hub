@@ -11,7 +11,7 @@ public class RGBAStrip extends AbstractDevice implements IActuator {
 
     public RGBAStrip(MessagingService messagingService) {
         super(messagingService);
-        this.data = new RGBAData(this);
+        this.data = new RGBAData();
     }
 
     @Override

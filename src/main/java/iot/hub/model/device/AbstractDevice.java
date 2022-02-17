@@ -13,29 +13,20 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Getter
 @Setter
-@Entity
-@Table(name = "devices")
 public abstract class AbstractDevice {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-    @Transient
     protected MessagingService messagingService;
 
-    @Column(name = "serial_number")
     protected String deviceId;
 
-    @Column(name = "to_device_topic")
     protected String toDeviceTopic;
 
-    @Column(name = "from_device_topic")
     protected String fromDeviceTopic;
 
     protected String type;
 
-    @Transient
     protected AbstractData data;
 
     public AbstractDevice(MessagingService messagingService) {

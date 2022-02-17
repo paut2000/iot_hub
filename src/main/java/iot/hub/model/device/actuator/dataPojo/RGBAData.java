@@ -1,31 +1,22 @@
 package iot.hub.model.device.actuator.dataPojo;
 
-import iot.hub.model.device.AbstractDevice;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
 import java.util.LinkedHashMap;
 
 @Setter
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
-@Table(name = "rgba_strip")
 public class RGBAData extends AbstractData {
 
     private Integer red = 0;
     private Integer green = 0;
     private Integer blue = 0;
     private Integer alfa = 0;
-
-    public RGBAData(AbstractDevice abstractDevice) {
-        super(abstractDevice);
-    }
 
     @Override
     public String toString() {

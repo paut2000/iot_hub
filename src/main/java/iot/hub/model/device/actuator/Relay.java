@@ -11,7 +11,7 @@ public class Relay extends AbstractDevice implements IActuator {
 
     public Relay(MessagingService messagingService) {
         super(messagingService);
-        this.data = new RelayData(this);
+        this.data = new RelayData();
     }
 
     @Override
