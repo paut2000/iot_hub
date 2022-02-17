@@ -20,8 +20,8 @@ public class DHT extends AbstractDevice implements ISensor {
 
     @Override
     public void setAllInfo(LinkedHashMap<String, Object> info) {
-        this.humidity = (Double) info.get("humidity");
-        this.temperature = (Double) info.get("temperature");
+        this.humidity = Double.parseDouble(info.get("humidity").toString());
+        this.temperature = Double.parseDouble(info.get("temperature").toString());
     }
 
 }

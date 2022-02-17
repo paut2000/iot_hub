@@ -1,66 +1,37 @@
 package iot.hub.model.device.actuator;
 
 import iot.hub.model.device.AbstractDevice;
+import iot.hub.model.device.actuator.dataPojo.RGBAData;
 import iot.hub.service.MessagingService;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.eclipse.paho.client.mqttv3.MqttException;
 
 import java.util.LinkedHashMap;
 
 public class RGBAStrip extends AbstractDevice implements IActuator {
 
-    @NoArgsConstructor
-    @Getter
-    @Setter
-    public static class RGBA {
-
-        private Integer red = 0;
-        private Integer green = 0;
-        private Integer blue = 0;
-        private Integer alfa = 0;
-
-        public RGBA(Integer red, Integer green, Integer blue, Integer alfa) {
-            this.red = red;
-            this.green = green;
-            this.blue = blue;
-            this.alfa = alfa;
-        }
-
-        @Override
-        public String toString() {
-            return "{" + "\"alfa\":" + alfa + ", \"red\":" + red + ", \"green\":" + green + ", \"blue\":" + blue + "}";
-        }
-    }
-
-    private RGBA status = new RGBA();
-
     public RGBAStrip(MessagingService messagingService) {
         super(messagingService);
+        this.data = new RGBAData(this);
     }
 
     @Override
     public String getStatus() {
-        return this.status.toString();
+        return ((RGBAData) this.data).toString();
     }
 
     @Override
-    public void setStatus(LinkedHashMap<String, Object> payload) {
-        this.status.setRed(Integer.parseInt(payload.get("red").toString()));
-        this.status.setGreen(Integer.parseInt(payload.get("green").toString()));
-        this.status.setBlue(Integer.parseInt(payload.get("blue").toString()));
-        this.status.setAlfa(Integer.parseInt(payload.get("alfa").toString()));
+    public void changeStatus(LinkedHashMap<String, Object> payload) {
+        this.data.changeData(payload);
     }
 
     @Override
     public void enable() {
         try {
-            this.messagingService.publish(this.toDeviceTopic, new RGBA(255,255,255, 255).toString(), 2, false);
-            this.status.setRed(255);
-            this.status.setGreen(255);
-            this.status.setBlue(255);
-            this.status.setAlfa(255);
+            this.messagingService.publish(this.toDeviceTopic, new RGBAData(255,255,255, 255).toString(), 2, false);
+            ((RGBAData) this.data).setRed(255);
+            ((RGBAData) this.data).setGreen(255);
+            ((RGBAData) this.data).setBlue(255);
+            ((RGBAData) this.data).setAlfa(255);
         } catch (MqttException e) {
             e.printStackTrace();
         }
@@ -69,23 +40,23 @@ public class RGBAStrip extends AbstractDevice implements IActuator {
     @Override
     public void disable() {
         try {
-            this.messagingService.publish(this.toDeviceTopic, new RGBA(0,0,0, 0).toString(), 2, false);
-            this.status.setRed(0);
-            this.status.setGreen(0);
-            this.status.setBlue(0);
-            this.status.setAlfa(0);
+            this.messagingService.publish(this.toDeviceTopic, new RGBAData(0,0,0, 0).toString(), 2, false);
+            ((RGBAData) this.data).setRed(0);
+            ((RGBAData) this.data).setGreen(0);
+            ((RGBAData) this.data).setBlue(0);
+            ((RGBAData) this.data).setAlfa(0);
         } catch (MqttException e) {
             e.printStackTrace();
         }
     }
 
-    public void setRGBA(RGBA rgba) {
+    public void setRGBA(RGBAData rgbaData) {
         try {
-            this.messagingService.publish(this.toDeviceTopic, rgba.toString(), 2, false);
-            this.status.setRed(rgba.getRed());
-            this.status.setGreen(rgba.getGreen());
-            this.status.setBlue(rgba.getBlue());
-            this.status.setAlfa(rgba.getAlfa());
+            this.messagingService.publish(this.toDeviceTopic, rgbaData.toString(), 2, false);
+            ((RGBAData) this.data).setRed(rgbaData.getRed());
+            ((RGBAData) this.data).setGreen(rgbaData.getGreen());
+            ((RGBAData) this.data).setBlue(rgbaData.getBlue());
+            ((RGBAData) this.data).setAlfa(rgbaData.getAlfa());
         } catch (MqttException e) {
             e.printStackTrace();
         }

@@ -3,8 +3,6 @@ package iot.hub.mqttSubscriber;
 import iot.hub.model.House;
 import iot.hub.model.device.AbstractDevice;
 import iot.hub.model.device.actuator.IActuator;
-import iot.hub.model.device.actuator.RGBAStrip;
-import iot.hub.model.device.actuator.Relay;
 import iot.hub.service.MessagingService;
 import iot.hub.service.factory.DeviceFactory;
 import org.apache.tomcat.util.json.JSONParser;
@@ -36,14 +34,14 @@ public class MqttSubscriber implements CommandLineRunner {
                 LinkedHashMap<String, Object> payload = jsonParser.parseObject();
 
                 AbstractDevice device = deviceFactory.createDevice(payload.get("deviceType").toString());
-                device.setId(payload.get("deviceId").toString());
+                device.setDeviceId(payload.get("deviceId").toString());
                 device.setToDeviceTopic((payload.get("toDeviceTopic").toString()));
                 device.setFromDeviceTopic((payload.get("fromDeviceTopic").toString()));
                 device.setType(payload.get("deviceType").toString());
 
                 if (payload.containsKey("status")) {
                     IActuator actuator = (IActuator) device;
-                    actuator.setStatus((LinkedHashMap<String, Object>) payload.get("status"));
+                    actuator.changeStatus((LinkedHashMap<String, Object>) payload.get("status"));
                 }
 
                 try {

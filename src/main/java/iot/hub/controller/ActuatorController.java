@@ -3,6 +3,7 @@ package iot.hub.controller;
 import iot.hub.model.House;
 import iot.hub.model.device.actuator.IActuator;
 import iot.hub.model.device.actuator.RGBAStrip;
+import iot.hub.model.device.actuator.dataPojo.RGBAData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,7 +40,7 @@ public class ActuatorController {
     ) {
         try {
             RGBAStrip rgba = (RGBAStrip) (house.getRooms().get(roomName).getAbstractDevices().get(deviceId));
-            rgba.setRGBA(new RGBAStrip.RGBA(red, green, blue, alfa));
+            rgba.setRGBA(new RGBAData(red, green, blue, alfa));
         } catch (Exception exception) {
             System.out.println(exception);
         }

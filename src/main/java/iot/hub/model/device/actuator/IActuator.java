@@ -7,7 +7,7 @@ public interface IActuator {
     String getStatus();
 
     // Вызывается со стороны МК
-    void setStatus(LinkedHashMap<String, Object> payload);
+    void changeStatus(LinkedHashMap<String, Object> payload);
 
     // Вызываются со стороны REST API
     void enable();
