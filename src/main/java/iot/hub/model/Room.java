@@ -1,9 +1,11 @@
 package iot.hub.model;
 
+import iot.hub.dao.DeviceDao;
 import iot.hub.model.device.AbstractDevice;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -13,22 +15,30 @@ import java.util.Map;
 @Setter
 public class Room {
 
-    private Integer id;
+    private DeviceDao deviceDao = null;
 
     private String name;
 
-    private final Map<String, AbstractDevice> abstractDevices = new LinkedHashMap<>();
+    private Map<String, AbstractDevice> abstractDevices = new LinkedHashMap<>();
 
-    public Room(String name) {
+    public Room(String name, DeviceDao deviceDao) {
+        this.deviceDao = deviceDao;
         this.name = name;
     }
 
     public void addDevice(AbstractDevice abstractDevice) {
-        abstractDevices.put(abstractDevice.getDeviceId(), abstractDevice);
+        if (abstractDevices.containsKey(abstractDevice.getDeviceId())) {
+            System.out.println("Девайс " + abstractDevice.getDeviceId() + " был отключён, но подключился снова");
+        } else {
+            abstractDevices.put(abstractDevice.getDeviceId(), abstractDevice);
+            deviceDao.save(this, abstractDevice);
+        }
     }
 
     public void removeDevice(AbstractDevice abstractDevice) {
+        //Не удаляет связанные дейвайсы
         abstractDevices.remove(abstractDevice.getDeviceId());
+        deviceDao.delete(abstractDevice.getDeviceId());
     }
 
     @Override

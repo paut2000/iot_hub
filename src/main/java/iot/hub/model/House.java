@@ -1,6 +1,9 @@
 package iot.hub.model;
 
+import iot.hub.dao.DeviceDao;
+import iot.hub.dao.RoomDao;
 import lombok.Getter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -11,19 +14,32 @@ import java.util.Map;
 public class House {
 
     @Getter
-    private Map<String, Room> rooms = new LinkedHashMap<>();
+    private Map<String, Room> rooms;
+
+    @Autowired
+    private RoomDao roomDao;
+
+    @Autowired
+    private DeviceDao deviceDao;
 
     @PostConstruct
     private void postConstructor() {
-
+        rooms = roomDao.findAll();
     }
 
     public void addRoom(Room room) {
-        rooms.put(room.getName(), room);
+        if (rooms.containsKey(room.getName())) {
+            System.out.println("Комната " + room.getName() + " уже есть");
+        }
+        else {
+            rooms.put(room.getName(), room);
+            roomDao.save(room);
+        }
     }
 
     public void removeRoom(String roomName) {
         rooms.remove(roomName);
+        roomDao.delete(roomName);
     }
 
     @Override

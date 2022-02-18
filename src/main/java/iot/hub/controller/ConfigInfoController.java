@@ -1,5 +1,6 @@
 package iot.hub.controller;
 
+import iot.hub.dao.DeviceDao;
 import iot.hub.model.House;
 import iot.hub.model.Room;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,9 @@ public class ConfigInfoController {
     @Autowired
     private House house;
 
+    @Autowired
+    private DeviceDao deviceDao;
+
     @GetMapping("/config")
     public String getConfig() {
         return house.toString();
@@ -21,7 +25,7 @@ public class ConfigInfoController {
     public void addRoom(
             @RequestParam(value = "roomName") String roomName
     ) {
-        house.addRoom(new Room(roomName));
+        house.addRoom(new Room(roomName, deviceDao));
     }
 
     @DeleteMapping("/config/room")
