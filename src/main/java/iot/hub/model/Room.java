@@ -29,11 +29,13 @@ public class Room {
 
     public void addDevice(AbstractDevice abstractDevice) {
         if (abstractDevices.containsKey(abstractDevice.getSerialNumber())) {
-            System.out.println("Девайс " + abstractDevice.getSerialNumber() + " был отключён, но подключился снова");
+            abstractDevices.remove(abstractDevice.getSerialNumber());
+            System.out.println("Девайс " + abstractDevice.getSerialNumber() + " в комнате " + this.name
+                    + " был отключён, но подключился снова");
         } else {
-            abstractDevices.put(abstractDevice.getSerialNumber(), abstractDevice);
             deviceDao.save(this, abstractDevice);
         }
+        abstractDevices.put(abstractDevice.getSerialNumber(), abstractDevice);
     }
 
     public void removeDevice(AbstractDevice abstractDevice) {

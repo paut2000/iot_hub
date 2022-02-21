@@ -39,15 +39,15 @@ public class MqttSubscriber implements CommandLineRunner {
                 device.setFromDeviceTopic((payload.get("fromDeviceTopic").toString()));
                 device.setType(payload.get("deviceType").toString());
 
+                // Также этот if помогает при перезапуске сервера: он обновляет состояния актуаторов (они не считываются из БД)
+                if (payload.containsKey("status")) {
+                    ((IActuator) device).changeStatus((LinkedHashMap<String, Object>) payload.get("status"));
+                }
+
                 try {
                     house.getRooms().get(payload.get("roomName").toString()).addDevice(device);
                 } catch (Exception exception) {
                     System.out.println("Нет такой комнаты: " + payload.get("roomName"));
-                }
-
-                if (payload.containsKey("status")) {
-                    IActuator actuator = (IActuator) device;
-                    actuator.changeStatus((LinkedHashMap<String, Object>) payload.get("status"));
                 }
 
                 System.out.println("new :: topic:" + t + "payload" + p);
