@@ -19,9 +19,6 @@ public class House {
     @Autowired
     private RoomDao roomDao;
 
-    @Autowired
-    private DeviceDao deviceDao;
-
     @PostConstruct
     private void postConstructor() {
         rooms = roomDao.findAll();

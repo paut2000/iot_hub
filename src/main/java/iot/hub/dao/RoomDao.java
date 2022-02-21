@@ -2,6 +2,7 @@ package iot.hub.dao;
 
 import iot.hub.model.Room;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Component;
 
 import java.sql.ResultSet;
@@ -9,28 +10,12 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
+@DependsOn({"tableCreator"})
 @Component
 public class RoomDao extends AbstractDao {
 
     @Autowired
     private DeviceDao deviceDao;
-
-    @Override
-    public void createTable() {
-        try {
-            statement = connection.prepareStatement(
-                    "CREATE TABLE IF NOT EXISTS rooms (\n" +
-                            "    id SERIAL,\n" +
-                            "    name TEXT NOT NULL,\n" +
-                            "    CONSTRAINT pk_room PRIMARY KEY (id),\n" +
-                            "    CONSTRAINT u_name UNIQUE (name)\n" +
-                            ")"
-            );
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println("Ошибка при создании таблицы Rooms: " + e.getMessage());
-        }
-    }
 
     public void save(Room room) {
         try {
@@ -66,8 +51,7 @@ public class RoomDao extends AbstractDao {
             ResultSet result = statement.executeQuery();
 
             while (result.next()) {
-                Room room = new Room(result.getString("name"), deviceDao
-                );
+                Room room = new Room(result.getString("name"), deviceDao);
                 map.put(room.getName(), room);
             }
         } catch (SQLException e) {

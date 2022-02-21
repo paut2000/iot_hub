@@ -3,7 +3,7 @@ package iot.hub.controller;
 import iot.hub.model.House;
 import iot.hub.model.device.actuator.IActuator;
 import iot.hub.model.device.actuator.RGBAStrip;
-import iot.hub.model.device.actuator.dataPojo.RGBAData;
+import iot.hub.model.device.data.RGBAData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -51,7 +51,7 @@ public class ActuatorController {
             @PathVariable String roomName,
             @PathVariable String deviceId
     ) {
-        return null;
+        return ((IActuator) house.getRooms().get(roomName).getAbstractDevices().get(deviceId)).getStatus();
     }
 
 }

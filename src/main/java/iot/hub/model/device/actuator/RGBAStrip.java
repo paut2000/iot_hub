@@ -1,16 +1,18 @@
 package iot.hub.model.device.actuator;
 
+import iot.hub.dao.deviceData.IDeviceDataDao;
 import iot.hub.model.device.AbstractDevice;
-import iot.hub.model.device.actuator.dataPojo.RGBAData;
+import iot.hub.model.device.data.RGBAData;
 import iot.hub.service.MessagingService;
 import org.eclipse.paho.client.mqttv3.MqttException;
 
+import java.sql.Timestamp;
 import java.util.LinkedHashMap;
 
 public class RGBAStrip extends AbstractDevice implements IActuator {
 
-    public RGBAStrip(MessagingService messagingService) {
-        super(messagingService);
+    public RGBAStrip(MessagingService messagingService, IDeviceDataDao dataDao) {
+        super(messagingService, dataDao);
         this.data = new RGBAData();
     }
 
@@ -22,6 +24,8 @@ public class RGBAStrip extends AbstractDevice implements IActuator {
     @Override
     public void changeStatus(LinkedHashMap<String, Object> payload) {
         this.data.changeData(payload);
+        this.data.setDatetime(new Timestamp(System.currentTimeMillis()));
+        this.dataDao.save(this);
     }
 
     @Override
@@ -32,6 +36,8 @@ public class RGBAStrip extends AbstractDevice implements IActuator {
             ((RGBAData) this.data).setGreen(255);
             ((RGBAData) this.data).setBlue(255);
             ((RGBAData) this.data).setAlfa(255);
+            this.data.setDatetime(new Timestamp(System.currentTimeMillis()));
+            this.dataDao.save(this);
         } catch (MqttException e) {
             e.printStackTrace();
         }
@@ -45,6 +51,8 @@ public class RGBAStrip extends AbstractDevice implements IActuator {
             ((RGBAData) this.data).setGreen(0);
             ((RGBAData) this.data).setBlue(0);
             ((RGBAData) this.data).setAlfa(0);
+            this.data.setDatetime(new Timestamp(System.currentTimeMillis()));
+            this.dataDao.save(this);
         } catch (MqttException e) {
             e.printStackTrace();
         }
@@ -57,6 +65,8 @@ public class RGBAStrip extends AbstractDevice implements IActuator {
             ((RGBAData) this.data).setGreen(rgbaData.getGreen());
             ((RGBAData) this.data).setBlue(rgbaData.getBlue());
             ((RGBAData) this.data).setAlfa(rgbaData.getAlfa());
+            this.data.setDatetime(new Timestamp(System.currentTimeMillis()));
+            this.dataDao.save(this);
         } catch (MqttException e) {
             e.printStackTrace();
         }

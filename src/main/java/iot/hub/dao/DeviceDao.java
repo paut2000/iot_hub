@@ -4,6 +4,7 @@ import iot.hub.model.Room;
 import iot.hub.model.device.AbstractDevice;
 import iot.hub.service.factory.DeviceFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Component;
 
 import java.sql.ResultSet;
@@ -11,33 +12,12 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
+@DependsOn({"tableCreator"})
 @Component
 public class DeviceDao extends AbstractDao {
 
     @Autowired
     private DeviceFactory deviceFactory;
-
-    @Override
-    protected void createTable() {
-        try {
-            statement = connection.prepareStatement(
-                    "CREATE TABLE IF NOT EXISTS devices (\n" +
-                            "    id SERIAL,\n" +
-                            "    serial_number TEXT,\n" +
-                            "    device_type TEXT,\n" +
-                            "    to_device_topic TEXT,\n" +
-                            "    from_device_topic TEXT,\n" +
-                            "    room_id INTEGER,\n" +
-                            "    CONSTRAINT pk_device PRIMARY KEY (id),\n" +
-                            "    CONSTRAINT u_device UNIQUE (serial_number),\n" +
-                            "    CONSTRAINT fk_room FOREIGN KEY (room_id) REFERENCES rooms (id)\n" +
-                            ")"
-            );
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println("Ошибка при создании таблицы Devices: " + e.getMessage());
-        }
-    }
 
     public void save(Room room, AbstractDevice device) {
         try {
@@ -49,7 +29,7 @@ public class DeviceDao extends AbstractDao {
                             "                     room_id)\n" +
                             "VALUES (?, ?, ?, ?, (SELECT id FROM rooms WHERE name = ?))"
             );
-            statement.setString(1, device.getDeviceId());
+            statement.setString(1, device.getSerialNumber());
             statement.setString(2, device.getType());
             statement.setString(3, device.getToDeviceTopic());
             statement.setString(4, device.getFromDeviceTopic());
@@ -116,11 +96,11 @@ public class DeviceDao extends AbstractDao {
         Map<String, AbstractDevice> map = new HashMap<>();
         while (result.next()) {
             AbstractDevice device = deviceFactory.createDevice(result.getString("device_type"));
-            device.setDeviceId(result.getString("serial_number"));
+            device.setSerialNumber(result.getString("serial_number"));
             device.setType(result.getString("device_type"));
             device.setToDeviceTopic(result.getString("to_device_topic"));
             device.setFromDeviceTopic(result.getString("from_device_topic"));
-            map.put(device.getDeviceId(), device);
+            map.put(device.getSerialNumber(), device);
         }
         return map;
     }

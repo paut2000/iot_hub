@@ -5,20 +5,21 @@ import iot.hub.model.device.AbstractDevice;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 @NoArgsConstructor
-@Getter
-@Setter
 public class Room {
 
     private DeviceDao deviceDao = null;
 
+    @Getter
+    @Setter
     private String name;
 
+    @Getter
+    @Setter
     private Map<String, AbstractDevice> abstractDevices = new LinkedHashMap<>();
 
     public Room(String name, DeviceDao deviceDao) {
@@ -27,18 +28,18 @@ public class Room {
     }
 
     public void addDevice(AbstractDevice abstractDevice) {
-        if (abstractDevices.containsKey(abstractDevice.getDeviceId())) {
-            System.out.println("Девайс " + abstractDevice.getDeviceId() + " был отключён, но подключился снова");
+        if (abstractDevices.containsKey(abstractDevice.getSerialNumber())) {
+            System.out.println("Девайс " + abstractDevice.getSerialNumber() + " был отключён, но подключился снова");
         } else {
-            abstractDevices.put(abstractDevice.getDeviceId(), abstractDevice);
+            abstractDevices.put(abstractDevice.getSerialNumber(), abstractDevice);
             deviceDao.save(this, abstractDevice);
         }
     }
 
     public void removeDevice(AbstractDevice abstractDevice) {
         //Не удаляет связанные дейвайсы
-        abstractDevices.remove(abstractDevice.getDeviceId());
-        deviceDao.delete(abstractDevice.getDeviceId());
+        abstractDevices.remove(abstractDevice.getSerialNumber());
+        deviceDao.delete(abstractDevice.getSerialNumber());
     }
 
     @Override

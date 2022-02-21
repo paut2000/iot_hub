@@ -1,5 +1,8 @@
 package iot.hub.service.factory;
 
+import iot.hub.dao.deviceData.DHTDataDao;
+import iot.hub.dao.deviceData.RGBADataDao;
+import iot.hub.dao.deviceData.RelayDataDao;
 import iot.hub.model.device.AbstractDevice;
 import iot.hub.model.device.actuator.RGBAStrip;
 import iot.hub.model.device.actuator.Relay;
@@ -14,11 +17,20 @@ public class DeviceFactory {
     @Autowired
     private MessagingService messagingService;
 
+    @Autowired
+    private RelayDataDao relayDataDao;
+
+    @Autowired
+    private RGBADataDao rgbaDataDao;
+
+    @Autowired
+    private DHTDataDao dhtDataDao;
+
     public AbstractDevice createDevice(String type) throws Exception {
 
-        if (type.equals("Relay")) return new Relay(messagingService);
-        if (type.equals("RGBAStrip")) return new RGBAStrip(messagingService);
-        if (type.equals("DHT")) return new DHT(messagingService);
+        if (type.equals("Relay")) return new Relay(messagingService, relayDataDao);
+        if (type.equals("RGBAStrip")) return new RGBAStrip(messagingService, rgbaDataDao);
+        if (type.equals("DHT")) return new DHT(messagingService, dhtDataDao);
 
         throw new Exception("Нет подходящего типа данных в DeviceFactory");
     }

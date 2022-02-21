@@ -34,20 +34,20 @@ public class MqttSubscriber implements CommandLineRunner {
                 LinkedHashMap<String, Object> payload = jsonParser.parseObject();
 
                 AbstractDevice device = deviceFactory.createDevice(payload.get("deviceType").toString());
-                device.setDeviceId(payload.get("deviceId").toString());
+                device.setSerialNumber(payload.get("deviceId").toString());
                 device.setToDeviceTopic((payload.get("toDeviceTopic").toString()));
                 device.setFromDeviceTopic((payload.get("fromDeviceTopic").toString()));
                 device.setType(payload.get("deviceType").toString());
 
-                if (payload.containsKey("status")) {
-                    IActuator actuator = (IActuator) device;
-                    actuator.changeStatus((LinkedHashMap<String, Object>) payload.get("status"));
-                }
-
                 try {
                     house.getRooms().get(payload.get("roomName").toString()).addDevice(device);
                 } catch (Exception exception) {
-                    System.out.println("Нет такой комнаты");
+                    System.out.println("Нет такой комнаты: " + payload.get("roomName"));
+                }
+
+                if (payload.containsKey("status")) {
+                    IActuator actuator = (IActuator) device;
+                    actuator.changeStatus((LinkedHashMap<String, Object>) payload.get("status"));
                 }
 
                 System.out.println("new :: topic:" + t + "payload" + p);

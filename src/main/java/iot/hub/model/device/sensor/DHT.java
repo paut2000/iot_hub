@@ -1,5 +1,6 @@
 package iot.hub.model.device.sensor;
 
+import iot.hub.dao.deviceData.IDeviceDataDao;
 import iot.hub.model.device.AbstractDevice;
 import iot.hub.service.MessagingService;
 import lombok.Getter;
@@ -14,8 +15,8 @@ public class DHT extends AbstractDevice implements ISensor {
     private Double humidity;
     private Double temperature;
 
-    public DHT(MessagingService messagingService) {
-        super(messagingService);
+    public DHT(MessagingService messagingService, IDeviceDataDao dataDao) {
+        super(messagingService, dataDao);
     }
 
     @Override

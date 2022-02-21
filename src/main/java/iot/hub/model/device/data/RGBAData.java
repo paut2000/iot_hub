@@ -1,10 +1,11 @@
-package iot.hub.model.device.actuator.dataPojo;
+package iot.hub.model.device.data;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.sql.Timestamp;
 import java.util.LinkedHashMap;
 
 @Setter
@@ -17,6 +18,14 @@ public class RGBAData extends AbstractData {
     private Integer green = 0;
     private Integer blue = 0;
     private Integer alfa = 0;
+
+    public RGBAData(Timestamp datetime, Integer red, Integer green, Integer blue, Integer alfa) {
+        super(datetime);
+        this.red = red;
+        this.green = green;
+        this.blue = blue;
+        this.alfa = alfa;
+    }
 
     @Override
     public String toString() {
