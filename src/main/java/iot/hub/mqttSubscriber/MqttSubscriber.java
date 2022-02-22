@@ -3,6 +3,7 @@ package iot.hub.mqttSubscriber;
 import iot.hub.model.House;
 import iot.hub.model.device.AbstractDevice;
 import iot.hub.model.device.actuator.IActuator;
+import iot.hub.model.device.sensor.ISensor;
 import iot.hub.service.MessagingService;
 import iot.hub.service.factory.DeviceFactory;
 import org.apache.tomcat.util.json.JSONParser;
@@ -40,8 +41,10 @@ public class MqttSubscriber implements CommandLineRunner {
                 device.setType(payload.get("deviceType").toString());
 
                 // Также этот if помогает при перезапуске сервера: он обновляет состояния актуаторов (они не считываются из БД)
-                if (payload.containsKey("status")) {
+                if (payload.containsKey("status")) { // это для актуатора
                     ((IActuator) device).changeStatus((LinkedHashMap<String, Object>) payload.get("status"));
+                } else { // для сенсора
+                    messagingService.subscribe((ISensor) device);
                 }
 
                 try {

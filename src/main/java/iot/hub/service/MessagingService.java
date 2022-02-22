@@ -37,7 +37,7 @@ public class MessagingService {
             JSONParser jsonParser = new JSONParser(p.toString());
             LinkedHashMap<String, Object> payload = jsonParser.parseObject();
 
-            sensor.setAllInfo(payload);
+            sensor.changeAllInfo(payload);
         });
     }
 

@@ -28,6 +28,6 @@ public class RelayData extends AbstractData {
 
     @Override
     public String toString() {
-        return "{" + "\"isOn\":" + status + "}";
+        return "{" + super.toString() + ", \"isOn\":" + status + "}";
     }
 }

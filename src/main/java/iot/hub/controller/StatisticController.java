@@ -12,6 +12,4 @@ public class StatisticController {
     @Autowired
     private House house;
 
-
-
 }

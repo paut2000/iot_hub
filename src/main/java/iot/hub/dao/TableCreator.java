@@ -18,11 +18,16 @@ public class TableCreator implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
+        // Основные таблицы
         createRoomTable();
         createDeviceTable();
 
+        // Таблицы актуаторов
         createRelayTable();
         createRGBATable();
+
+        // Таблицы сенсоров
+        createDHTTable();
     }
 
     private void createRoomTable() {
@@ -98,6 +103,25 @@ public class TableCreator implements CommandLineRunner {
             statement.executeUpdate();
         } catch (SQLException e) {
             System.out.println("Ошибка при создании таблицы RGBA: " + e.getMessage());
+        }
+    }
+
+    private void createDHTTable() {
+        try {
+            statement = connection.prepareStatement(
+                    "CREATE TABLE IF NOT EXISTS dht (\n" +
+                            "    id SERIAL,\n" +
+                            "    datetime TIMESTAMP,\n" +
+                            "    temperature DOUBLE PRECISION,\n" +
+                            "    humidity DOUBLE PRECISION,\n" +
+                            "    device_id INTEGER,\n" +
+                            "    CONSTRAINT pk_dht PRIMARY KEY (id),\n" +
+                            "    CONSTRAINT fk_device FOREIGN KEY (device_id) REFERENCES devices (id)\n" +
+                            ")"
+            );
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("Ошибка при создании таблицы DHT: " + e.getMessage());
         }
     }
 

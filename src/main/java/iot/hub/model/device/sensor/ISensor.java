@@ -4,6 +4,10 @@ import java.util.LinkedHashMap;
 
 public interface ISensor {
 
-    void setAllInfo(LinkedHashMap<String, Object> info);
+    // Вызывается со стороны МК
+    void changeAllInfo(LinkedHashMap<String, Object> info);
+
+    // Вызывается со стороны REST API
+    void changeUpdateFrequency(Integer milliSeconds);
 
 }

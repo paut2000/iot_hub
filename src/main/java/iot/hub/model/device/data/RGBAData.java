@@ -29,7 +29,13 @@ public class RGBAData extends AbstractData {
 
     @Override
     public String toString() {
-        return "{" + "\"alfa\":" + alfa + ", \"red\":" + red + ", \"green\":" + green + ", \"blue\":" + blue + "}";
+        return "{" +
+                super.toString() + ", " +
+                "\"alfa\":" + alfa + ", " +
+                "\"red\":" + red + ", " +
+                "\"green\":" + green + ", " +
+                "\"blue\":" + blue +
+                "}";
     }
 
     @Override
