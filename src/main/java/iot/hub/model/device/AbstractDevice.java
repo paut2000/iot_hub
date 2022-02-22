@@ -8,6 +8,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
+
 @NoArgsConstructor
 @AllArgsConstructor
 public abstract class AbstractDevice {
@@ -39,6 +41,26 @@ public abstract class AbstractDevice {
     public AbstractDevice(MessagingService messagingService, IDeviceDataDao dataDao) {
         this.messagingService = messagingService;
         this.dataDao = dataDao;
+    }
+
+    public ArrayList<? extends AbstractData> getSample() {
+        return dataDao.getByDevice(this);
+    }
+
+    public String getStatistic() {
+        ArrayList<AbstractData> sample = (ArrayList<AbstractData>) getSample();
+
+        StringBuilder str = new StringBuilder();
+
+        str.append("{statistic:[");
+
+        for (AbstractData record : sample) {
+            str.append(record.toString()).append(",");
+        }
+        str.deleteCharAt(str.length() - 1);
+        str.append("]}");
+
+        return str.toString();
     }
 
     @Override

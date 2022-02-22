@@ -20,7 +20,12 @@ public class DHT extends AbstractDevice implements ISensor {
     }
 
     @Override
-    public void changeAllInfo(LinkedHashMap<String, Object> info) {
+    public String getInfo() {
+        return ((DHTData) this.data).toString();
+    }
+
+    @Override
+    public void changeInfo(LinkedHashMap<String, Object> info) {
         this.data.changeData(info);
         this.data.setDatetime(new Timestamp(System.currentTimeMillis()));
         this.dataDao.save(this);
