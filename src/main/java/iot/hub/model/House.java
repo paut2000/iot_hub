@@ -1,13 +1,11 @@
 package iot.hub.model;
 
-import iot.hub.dao.DeviceDao;
 import iot.hub.dao.RoomDao;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 @Component
@@ -50,6 +48,6 @@ public class House {
 
         if (rs.length() != 0) rs.deleteCharAt(rs.length() - 1);
 
-        return "{" + "\"house\":{" + rs + "}}";
+        return "{" + "\"rooms\":[" + rs + "]}";
     }
 }

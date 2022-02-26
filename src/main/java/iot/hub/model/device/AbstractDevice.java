@@ -65,8 +65,10 @@ public abstract class AbstractDevice {
 
     @Override
     public String toString() {
-        return "\"" + serialNumber + "\":" + "{" +
-                "\"type\":\"" + type + "\""
-                + "}";
+        return "{" +
+                "\"serialNumber\":\"" + serialNumber + "\"," +
+                "\"type\":\"" + type + "\"," +
+                "\"data\": " + getData().toString() +
+                "}";
     }
 }

@@ -55,6 +55,7 @@ public class Room {
 
         if (ads.length() != 0) ads.deleteCharAt(ads.length() - 1);
 
-        return "\"" + name + "\": {" + ads + "}";
+        return "{\"name\":\"" + name + "\","
+                + "\"devices\":[" + ads + "]" + "}";
     }
 }
