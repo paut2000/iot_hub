@@ -1,6 +1,9 @@
 package iot.hub.controller;
 
 import iot.hub.dao.DeviceDao;
+import iot.hub.exception.ResourceAlreadyExistException;
+import iot.hub.exception.ResourceNotFoundException;
+import iot.hub.controller.response.HttpResponse;
 import iot.hub.model.House;
 import iot.hub.model.Room;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,23 +19,33 @@ public class ConfigInfoController {
     @Autowired
     private DeviceDao deviceDao;
 
-    @GetMapping("/config")
-    public String getConfig() {
-        return house.toString();
+    @GetMapping("/house")
+    public House getHouse() {
+        return house;
     }
 
-    @PostMapping("/config/room")
-    public void addRoom(
+    @PostMapping("/house/room")
+    public HttpResponse<?> addRoom(
             @RequestParam(value = "roomName") String roomName
     ) {
-        house.addRoom(new Room(roomName, deviceDao));
+        try {
+            house.addRoom(new Room(roomName, deviceDao));
+        } catch (ResourceAlreadyExistException e) {
+            return new HttpResponse<>("bad", e.getMessage());
+        }
+        return new HttpResponse<>("ok", "Комната добавлена: " + roomName);
     }
 
-    @DeleteMapping("/config/room")
-    public void deleteRoom(
+    @DeleteMapping("/house/room")
+    public HttpResponse<?> deleteRoom(
             @RequestParam(value = "roomName") String roomName
     ) {
-        house.removeRoom(roomName);
+        try {
+            house.removeRoom(roomName);
+        } catch (ResourceNotFoundException e) {
+            return new HttpResponse<>("bad", e.getMessage());
+        }
+        return new HttpResponse<>("ok", "Комната удалена: " + roomName);
     }
 
 }

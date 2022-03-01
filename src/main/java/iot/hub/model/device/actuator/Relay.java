@@ -17,11 +17,6 @@ public class Relay extends AbstractDevice implements IActuator {
     }
 
     @Override
-    public String getStatus() {
-        return ((RelayData) this.data).toString();
-    }
-
-    @Override
     public void changeStatus(LinkedHashMap<String, Object> payload) {
         this.data.changeData(payload);
         this.data.setDatetime(new Timestamp(System.currentTimeMillis()));

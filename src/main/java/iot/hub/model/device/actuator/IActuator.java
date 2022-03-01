@@ -4,8 +4,6 @@ import java.util.LinkedHashMap;
 
 public interface IActuator {
 
-    String getStatus();
-
     // Вызывается со стороны МК
     void changeStatus(LinkedHashMap<String, Object> payload);
 

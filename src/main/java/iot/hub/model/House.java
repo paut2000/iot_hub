@@ -1,6 +1,9 @@
 package iot.hub.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import iot.hub.dao.RoomDao;
+import iot.hub.exception.ResourceAlreadyExistException;
+import iot.hub.exception.ResourceNotFoundException;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -22,9 +25,9 @@ public class House {
         rooms = roomDao.findAll();
     }
 
-    public void addRoom(Room room) {
+    public void addRoom(Room room) throws ResourceAlreadyExistException {
         if (rooms.containsKey(room.getName())) {
-            System.out.println("Комната " + room.getName() + " уже есть");
+            throw new ResourceAlreadyExistException("комната " + room.getName());
         }
         else {
             rooms.put(room.getName(), room);
@@ -32,22 +35,21 @@ public class House {
         }
     }
 
-    public void removeRoom(String roomName) {
-        rooms.remove(roomName);
-        roomDao.delete(roomName);
-    }
-
-    @Override
-    public String toString() {
-
-        StringBuilder rs = new StringBuilder();
-
-        for (Room room : rooms.values()) {
-            rs.append(room.toString()).append(",");
+    public void removeRoom(String roomName) throws ResourceNotFoundException {
+        if (rooms.containsKey(roomName)) {
+            rooms.remove(roomName);
+            roomDao.delete(roomName);
         }
-
-        if (rs.length() != 0) rs.deleteCharAt(rs.length() - 1);
-
-        return "{" + "\"rooms\":[" + rs + "]}";
+        else {
+            throw new ResourceNotFoundException("комната " + roomName);
+        }
     }
+
+    @JsonIgnore
+    public Room getRoom(String roomName) throws ResourceNotFoundException {
+        Room room = this.rooms.get(roomName);
+        if (room == null) throw new ResourceNotFoundException("Комната " + roomName);
+        return room;
+    }
+
 }

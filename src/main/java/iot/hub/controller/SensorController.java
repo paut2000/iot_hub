@@ -1,7 +1,8 @@
 package iot.hub.controller;
 
+import iot.hub.exception.ResourceNotFoundException;
+import iot.hub.controller.response.HttpResponse;
 import iot.hub.model.House;
-import iot.hub.model.device.sensor.ISensor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,12 +17,15 @@ public class SensorController {
     private House house;
 
     @GetMapping("/sensor/{roomName}/{deviceId}")
-    public String getSensorInfo(
+    public HttpResponse<?> getSensorInfo(
             @PathVariable String roomName,
             @PathVariable String deviceId
     ) {
-        ISensor sensor = (ISensor) house.getRooms().get(roomName).getAbstractDevices().get(deviceId);
-        return sensor.getInfo();
+        try {
+            return new HttpResponse<>("ok", house.getRoom(roomName).getDevice(deviceId).getData());
+        } catch (ResourceNotFoundException e) {
+            return new HttpResponse<>("bad", e.getMessage());
+        }
     }
 
 }

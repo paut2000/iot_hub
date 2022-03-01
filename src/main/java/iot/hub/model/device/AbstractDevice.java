@@ -1,5 +1,7 @@
 package iot.hub.model.device;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import iot.hub.dao.deviceData.IDeviceDataDao;
 import iot.hub.model.device.data.AbstractData;
 import iot.hub.service.MessagingService;
@@ -24,10 +26,12 @@ public abstract class AbstractDevice {
 
     @Getter
     @Setter
+    @JsonIgnore
     protected String toDeviceTopic;
 
     @Getter
     @Setter
+    @JsonIgnore
     protected String fromDeviceTopic;
 
     @Getter
@@ -43,32 +47,9 @@ public abstract class AbstractDevice {
         this.dataDao = dataDao;
     }
 
+    @JsonIgnore
     public ArrayList<? extends AbstractData> getSample() {
         return dataDao.getByDevice(this);
     }
 
-    public String getStatistic() {
-        ArrayList<AbstractData> sample = (ArrayList<AbstractData>) getSample();
-
-        StringBuilder str = new StringBuilder();
-
-        str.append("{statistic:[");
-
-        for (AbstractData record : sample) {
-            str.append(record.toString()).append(",");
-        }
-        str.deleteCharAt(str.length() - 1);
-        str.append("]}");
-
-        return str.toString();
-    }
-
-    @Override
-    public String toString() {
-        return "{" +
-                "\"serialNumber\":\"" + serialNumber + "\"," +
-                "\"type\":\"" + type + "\"," +
-                "\"data\": " + getData().toString() +
-                "}";
-    }
 }

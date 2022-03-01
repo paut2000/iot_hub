@@ -29,8 +29,4 @@ public class DHTData extends AbstractData {
         this.temperature = Double.parseDouble(payload.get("temperature").toString());
     }
 
-    @Override
-    public String toString() {
-        return "{" + super.toString() + ", \"humidity\":" + humidity + ", \"temperature\":" + temperature + "}";
-    }
 }

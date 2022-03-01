@@ -26,8 +26,4 @@ public class RelayData extends AbstractData {
         this.status = Boolean.parseBoolean(payload.get("isOn").toString());
     }
 
-    @Override
-    public String toString() {
-        return "{" + super.toString() + ", \"isOn\":" + status + "}";
-    }
 }

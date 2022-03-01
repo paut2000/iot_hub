@@ -1,7 +1,8 @@
 package iot.hub.controller;
 
+import iot.hub.exception.ResourceNotFoundException;
+import iot.hub.controller.response.HttpResponse;
 import iot.hub.model.House;
-import iot.hub.model.device.AbstractDevice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,12 +17,15 @@ public class StatisticController {
     private House house;
 
     @GetMapping("/{roomName}/{deviceId}")
-    public String getStatisticForDevice(
+    public HttpResponse<?> getStatisticForDevice(
             @PathVariable String roomName,
             @PathVariable String deviceId
     ) {
-        AbstractDevice device = house.getRooms().get(roomName).getAbstractDevices().get(deviceId);
-        return device.getStatistic();
+        try {
+            return new HttpResponse<>("ok", house.getRoom(roomName).getDevice(deviceId).getSample());
+        } catch (ResourceNotFoundException e) {
+            return new HttpResponse<>("bad", e.getMessage());
+        }
     }
 
 }

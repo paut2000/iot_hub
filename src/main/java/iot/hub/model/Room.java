@@ -1,6 +1,11 @@
 package iot.hub.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.impl.IndexedListSerializer;
 import iot.hub.dao.DeviceDao;
+import iot.hub.exception.ResourceNotFoundException;
 import iot.hub.model.device.AbstractDevice;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,6 +25,7 @@ public class Room {
 
     @Getter
     @Setter
+    @JsonProperty("devices")
     private Map<String, AbstractDevice> abstractDevices = new LinkedHashMap<>();
 
     public Room(String name, DeviceDao deviceDao) {
@@ -44,18 +50,10 @@ public class Room {
         deviceDao.delete(abstractDevice.getSerialNumber());
     }
 
-    @Override
-    public String toString() {
-
-        StringBuilder ads = new StringBuilder();
-
-        for (AbstractDevice abstractDevice : abstractDevices.values()) {
-            ads.append(abstractDevice.toString()).append(",");
-        }
-
-        if (ads.length() != 0) ads.deleteCharAt(ads.length() - 1);
-
-        return "{\"name\":\"" + name + "\","
-                + "\"devices\":[" + ads + "]" + "}";
+    @JsonIgnore
+    public AbstractDevice getDevice(String deviceId) throws ResourceNotFoundException {
+        AbstractDevice device = this.abstractDevices.get(deviceId);
+        if (device == null) throw new ResourceNotFoundException("Девайс " + deviceId);
+        return device;
     }
 }

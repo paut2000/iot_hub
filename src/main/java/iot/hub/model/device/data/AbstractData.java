@@ -18,9 +18,4 @@ public abstract class AbstractData {
 
     public abstract void changeData(LinkedHashMap<String, Object> payload);
 
-    @Override
-    public String toString() {
-        return "\"datetime\":" + "\"" + datetime + "\"";
-    }
-
 }

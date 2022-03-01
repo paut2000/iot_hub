@@ -4,8 +4,6 @@ import java.util.LinkedHashMap;
 
 public interface ISensor {
 
-    String getInfo();
-
     // Вызывается со стороны МК
     void changeInfo(LinkedHashMap<String, Object> info);
 

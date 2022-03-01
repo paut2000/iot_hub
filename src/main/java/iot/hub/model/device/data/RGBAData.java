@@ -28,17 +28,6 @@ public class RGBAData extends AbstractData {
     }
 
     @Override
-    public String toString() {
-        return "{" +
-                super.toString() + ", " +
-                "\"alfa\":" + alfa + ", " +
-                "\"red\":" + red + ", " +
-                "\"green\":" + green + ", " +
-                "\"blue\":" + blue +
-                "}";
-    }
-
-    @Override
     public void changeData(LinkedHashMap<String, Object> payload) {
         this.red = Integer.parseInt(payload.get("red").toString());
         this.green = Integer.parseInt(payload.get("green").toString());

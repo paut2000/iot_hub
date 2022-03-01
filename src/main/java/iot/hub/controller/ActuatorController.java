@@ -1,5 +1,7 @@
 package iot.hub.controller;
 
+import iot.hub.exception.ResourceNotFoundException;
+import iot.hub.controller.response.HttpResponse;
 import iot.hub.model.House;
 import iot.hub.model.device.actuator.IActuator;
 import iot.hub.model.device.actuator.RGBAStrip;
@@ -15,22 +17,25 @@ public class ActuatorController {
     private House house;
 
     @PostMapping("/control/actuator/{roomName}/{deviceId}")
-    public void control(
+    public HttpResponse<?> control(
             @PathVariable String roomName,
             @PathVariable String deviceId,
             @RequestParam(name = "action") String action
     ) {
+        IActuator actuator;
         try {
-            IActuator actuator = (IActuator) (house.getRooms().get(roomName).getAbstractDevices().get(deviceId));
+            actuator = (IActuator) (house.getRoom(roomName).getDevice(deviceId));
             if (action.equals("enable")) actuator.enable();
-            if (action.equals("disable")) actuator.disable();
+            else if (action.equals("disable")) actuator.disable();
+            else return new HttpResponse<>("bad", "Неизвестное действие: " + action);
         } catch (Exception exception) {
-            System.out.println(exception);
+            return new HttpResponse<>("bad", exception.getMessage());
         }
+        return new HttpResponse<>("ok", actuator);
     }
 
     @PostMapping("/control/rgba/{roomName}/{deviceId}")
-    public void rgba(
+    public HttpResponse<?> rgba(
             @PathVariable String roomName,
             @PathVariable String deviceId,
             @RequestParam(name = "red") Integer red,
@@ -38,20 +43,26 @@ public class ActuatorController {
             @RequestParam(name = "blue") Integer blue,
             @RequestParam(name = "alfa") Integer alfa
     ) {
+        RGBAStrip rgba;
         try {
-            RGBAStrip rgba = (RGBAStrip) (house.getRooms().get(roomName).getAbstractDevices().get(deviceId));
+            rgba = (RGBAStrip) (house.getRoom(roomName).getDevice(deviceId));
             rgba.setRGBA(new RGBAData(red, green, blue, alfa));
         } catch (Exception exception) {
-            System.out.println(exception);
+            return new HttpResponse<>("bad", exception.getMessage());
         }
+        return new HttpResponse<>("ok", rgba);
     }
 
     @GetMapping("/status/{roomName}/{deviceId}")
-    public String getStatus(
+    public HttpResponse<?> getData(
             @PathVariable String roomName,
             @PathVariable String deviceId
     ) {
-        return ((IActuator) house.getRooms().get(roomName).getAbstractDevices().get(deviceId)).getStatus();
+        try {
+            return new HttpResponse<>("ok", house.getRoom(roomName).getDevice(deviceId).getData());
+        } catch (ResourceNotFoundException e) {
+            return new HttpResponse<>("bad", e.getMessage());
+        }
     }
 
 }
