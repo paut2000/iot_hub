@@ -36,7 +36,9 @@ public class MqttSubscriber implements CommandLineRunner {
                 NewDeviceInfo newDeviceInfo = new ObjectMapper().readerFor(NewDeviceInfo.class).readValue(p.toString());
                 String roomName = newDeviceInfo.getRoomName();
                 AbstractDevice device = deviceFactory.injectDependencies(newDeviceInfo.getDevice());
-                device.getData().setDatetime(new Timestamp(System.currentTimeMillis()));
+
+                // Заполняет поле datetime и сохраняет в БД
+                device.changeData(device.getData());
 
                 messagingService.subscribe(device);
 
