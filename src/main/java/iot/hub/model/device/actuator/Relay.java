@@ -4,11 +4,13 @@ import iot.hub.dao.deviceData.IDeviceDataDao;
 import iot.hub.model.device.AbstractDevice;
 import iot.hub.model.device.data.RelayData;
 import iot.hub.service.MessagingService;
+import lombok.NoArgsConstructor;
 import org.eclipse.paho.client.mqttv3.MqttException;
 
 import java.sql.Timestamp;
 import java.util.LinkedHashMap;
 
+@NoArgsConstructor
 public class Relay extends AbstractDevice implements IActuator {
 
     public Relay(MessagingService messagingService, IDeviceDataDao dataDao) {

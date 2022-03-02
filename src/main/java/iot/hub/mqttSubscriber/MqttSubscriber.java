@@ -31,6 +31,7 @@ public class MqttSubscriber implements CommandLineRunner {
         try {
 
             messagingService.subscribe("/device/new", (t, p) -> {
+
                 JSONParser jsonParser = new JSONParser(p.toString());
                 LinkedHashMap<String, Object> payload = jsonParser.parseObject();
 

@@ -1,7 +1,6 @@
 package iot.hub.model.device;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import iot.hub.dao.deviceData.IDeviceDataDao;
 import iot.hub.model.device.data.AbstractData;
 import iot.hub.service.MessagingService;
