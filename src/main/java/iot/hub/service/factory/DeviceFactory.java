@@ -35,4 +35,12 @@ public class DeviceFactory {
         throw new Exception("Нет подходящего типа данных в DeviceFactory");
     }
 
+    public AbstractDevice injectDependencies(AbstractDevice device) {
+        device.setMessagingService(messagingService);
+        if (device.getType().equals("Relay")) device.setDataDao(relayDataDao);
+        if (device.getType().equals("RGBAStrip")) device.setDataDao(rgbaDataDao);
+        if (device.getType().equals("DHT")) device.setDataDao(dhtDataDao);
+        return device;
+    }
+
 }

@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.sql.Timestamp;
-import java.util.LinkedHashMap;
 
 @Setter
 @Getter
@@ -28,10 +27,10 @@ public class RGBAData extends AbstractData {
     }
 
     @Override
-    public void changeData(LinkedHashMap<String, Object> payload) {
-        this.red = Integer.parseInt(payload.get("red").toString());
-        this.green = Integer.parseInt(payload.get("green").toString());
-        this.blue = Integer.parseInt(payload.get("blue").toString());
-        this.alfa = Integer.parseInt(payload.get("alfa").toString());
+    public void changeData(AbstractData data) {
+        this.red = ((RGBAData) data).getRed();
+        this.green = ((RGBAData) data).getGreen();
+        this.blue = ((RGBAData) data).getBlue();
+        this.alfa = ((RGBAData) data).getAlfa();
     }
 }

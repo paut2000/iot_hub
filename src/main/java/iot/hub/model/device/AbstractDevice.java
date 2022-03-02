@@ -1,6 +1,7 @@
 package iot.hub.model.device;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import iot.hub.dao.deviceData.IDeviceDataDao;
 import iot.hub.model.device.data.AbstractData;
 import iot.hub.service.MessagingService;
@@ -11,14 +12,15 @@ import lombok.Setter;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 
 @NoArgsConstructor
 @AllArgsConstructor
 public abstract class AbstractDevice {
 
+    @Setter
     protected MessagingService messagingService = null;
 
+    @Setter
     protected IDeviceDataDao dataDao = null;
 
     @Getter
@@ -27,12 +29,12 @@ public abstract class AbstractDevice {
 
     @Getter
     @Setter
-    @JsonIgnore
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     protected String toDeviceTopic;
 
     @Getter
     @Setter
-    @JsonIgnore
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     protected String fromDeviceTopic;
 
     @Getter
@@ -54,8 +56,8 @@ public abstract class AbstractDevice {
     }
 
     // Вызывается со стороны МК
-    public void changeData(LinkedHashMap<String, Object> payload) {
-        this.data.changeData(payload);
+    public void changeData(AbstractData data) {
+        this.data.changeData(data);
         this.data.setDatetime(new Timestamp(System.currentTimeMillis()));
         this.dataDao.save(this);
     }

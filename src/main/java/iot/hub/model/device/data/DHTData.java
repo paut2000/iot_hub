@@ -24,9 +24,9 @@ public class DHTData extends AbstractData {
     }
 
     @Override
-    public void changeData(LinkedHashMap<String, Object> payload) {
-        this.humidity = Double.parseDouble(payload.get("humidity").toString());
-        this.temperature = Double.parseDouble(payload.get("temperature").toString());
+    public void changeData(AbstractData data) {
+        this.humidity = ((DHTData) data).getHumidity();
+        this.temperature = ((DHTData) data).getTemperature();
     }
 
 }

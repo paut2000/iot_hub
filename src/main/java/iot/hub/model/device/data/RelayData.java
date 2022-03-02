@@ -22,8 +22,8 @@ public class RelayData extends AbstractData {
     }
 
     @Override
-    public void changeData(LinkedHashMap<String, Object> payload) {
-        this.status = Boolean.parseBoolean(payload.get("isOn").toString());
+    public void changeData(AbstractData data) {
+        this.status = ((RelayData) data).getStatus();
     }
 
 }

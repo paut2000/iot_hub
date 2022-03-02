@@ -1,12 +1,12 @@
 package iot.hub.model.device.data;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.sql.Timestamp;
-import java.util.LinkedHashMap;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -14,8 +14,9 @@ import java.util.LinkedHashMap;
 @Setter
 public abstract class AbstractData {
 
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Timestamp datetime;
 
-    public abstract void changeData(LinkedHashMap<String, Object> payload);
+    public abstract void changeData(AbstractData data);
 
 }

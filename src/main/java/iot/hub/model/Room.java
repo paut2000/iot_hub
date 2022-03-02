@@ -2,8 +2,6 @@ package iot.hub.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.ser.impl.IndexedListSerializer;
 import iot.hub.dao.DeviceDao;
 import iot.hub.exception.ResourceNotFoundException;
 import iot.hub.model.device.AbstractDevice;
