@@ -9,7 +9,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -49,6 +51,13 @@ public abstract class AbstractDevice {
     @JsonIgnore
     public ArrayList<? extends AbstractData> getSample() {
         return dataDao.getByDevice(this);
+    }
+
+    // Вызывается со стороны МК
+    public void changeData(LinkedHashMap<String, Object> payload) {
+        this.data.changeData(payload);
+        this.data.setDatetime(new Timestamp(System.currentTimeMillis()));
+        this.dataDao.save(this);
     }
 
 }

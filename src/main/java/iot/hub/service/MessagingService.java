@@ -29,15 +29,13 @@ public class MessagingService {
         mqttClient.subscribeWithResponse(topic, iMqttMessageListener);
     }
 
-    public void subscribe(ISensor sensor) throws MqttException {
-
-        AbstractDevice device = (AbstractDevice) sensor;
+    public void subscribe(AbstractDevice device) throws MqttException {
 
         mqttClient.subscribeWithResponse(device.getFromDeviceTopic(), (t, p) -> {
             JSONParser jsonParser = new JSONParser(p.toString());
             LinkedHashMap<String, Object> payload = jsonParser.parseObject();
 
-            sensor.changeInfo(payload);
+            device.changeData(payload);
         });
     }
 

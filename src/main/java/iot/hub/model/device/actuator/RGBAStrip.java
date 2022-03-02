@@ -7,20 +7,12 @@ import iot.hub.service.MessagingService;
 import org.eclipse.paho.client.mqttv3.MqttException;
 
 import java.sql.Timestamp;
-import java.util.LinkedHashMap;
 
 public class RGBAStrip extends AbstractDevice implements IActuator {
 
     public RGBAStrip(MessagingService messagingService, IDeviceDataDao dataDao) {
         super(messagingService, dataDao);
         this.data = new RGBAData();
-    }
-
-    @Override
-    public void changeStatus(LinkedHashMap<String, Object> payload) {
-        this.data.changeData(payload);
-        this.data.setDatetime(new Timestamp(System.currentTimeMillis()));
-        this.dataDao.save(this);
     }
 
     @Override

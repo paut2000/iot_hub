@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 import org.eclipse.paho.client.mqttv3.MqttException;
 
 import java.sql.Timestamp;
-import java.util.LinkedHashMap;
 
 @NoArgsConstructor
 public class Relay extends AbstractDevice implements IActuator {
@@ -16,13 +15,6 @@ public class Relay extends AbstractDevice implements IActuator {
     public Relay(MessagingService messagingService, IDeviceDataDao dataDao) {
         super(messagingService, dataDao);
         this.data = new RelayData();
-    }
-
-    @Override
-    public void changeStatus(LinkedHashMap<String, Object> payload) {
-        this.data.changeData(payload);
-        this.data.setDatetime(new Timestamp(System.currentTimeMillis()));
-        this.dataDao.save(this);
     }
 
     @Override

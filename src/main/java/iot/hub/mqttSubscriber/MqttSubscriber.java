@@ -43,13 +43,13 @@ public class MqttSubscriber implements CommandLineRunner {
 
                 // Также этот if помогает при перезапуске сервера: он обновляет состояния актуаторов (они не считываются из БД)
                 if (payload.containsKey("status")) { // это для актуатора
-                    ((IActuator) device).changeStatus((LinkedHashMap<String, Object>) payload.get("status"));
+                    device.changeData((LinkedHashMap<String, Object>) payload.get("status"));
                 }
 
                 // Также этот if помогает при перезапуске сервера: он обновляет данные сенсоров (они не считываются из БД)
                 if (payload.containsKey("data")) { // это для сенсора
-                    ((ISensor) device).changeInfo((LinkedHashMap<String, Object>) payload.get("data"));
-                    messagingService.subscribe((ISensor) device);
+                    device.changeData((LinkedHashMap<String, Object>) payload.get("data"));
+                    messagingService.subscribe(device);
                 }
 
                 try {
