@@ -49,9 +49,9 @@ public class Room {
     }
 
     @JsonIgnore
-    public AbstractDevice getDevice(String deviceId) throws ResourceNotFoundException {
-        AbstractDevice device = this.abstractDevices.get(deviceId);
-        if (device == null) throw new ResourceNotFoundException("Девайс " + deviceId);
+    public AbstractDevice getDevice(String serialNumber) throws ResourceNotFoundException {
+        AbstractDevice device = this.abstractDevices.get(serialNumber);
+        if (device == null) throw new ResourceNotFoundException("Девайс " + serialNumber);
         return device;
     }
 }

@@ -2,7 +2,7 @@ package iot.hub.dao;
 
 import iot.hub.model.Room;
 import iot.hub.model.device.AbstractDevice;
-import iot.hub.service.factory.DeviceFactory;
+import iot.hub.factory.DeviceFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Component;

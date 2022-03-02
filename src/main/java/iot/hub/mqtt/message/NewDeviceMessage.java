@@ -1,4 +1,4 @@
-package iot.hub.mqtt;
+package iot.hub.mqtt.message;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import iot.hub.model.device.AbstractDevice;
@@ -12,7 +12,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class NewDeviceInfo {
+public class NewDeviceMessage {
 
     private String roomName;
 

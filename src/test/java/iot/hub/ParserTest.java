@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import iot.hub.model.device.actuator.Relay;
 import iot.hub.model.device.data.RelayData;
-import iot.hub.mqtt.NewDeviceInfo;
+import iot.hub.mqtt.message.NewDeviceMessage;
 import org.junit.jupiter.api.Test;
 import org.junit.Assert;
 
@@ -26,15 +26,15 @@ public class ParserTest {
                 "\t}\n" +
                 "}";
 
-        NewDeviceInfo actualDeviceInfo = null;
+        NewDeviceMessage actualDeviceInfo = null;
         try {
             actualDeviceInfo = new ObjectMapper()
-                    .readValue(payload, NewDeviceInfo.class);
+                    .readValue(payload, NewDeviceMessage.class);
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
         }
 
-        NewDeviceInfo expectedDeviceInfo = new NewDeviceInfo();
+        NewDeviceMessage expectedDeviceInfo = new NewDeviceMessage();
         expectedDeviceInfo.setRoomName("bedroom");
         Relay relay = new Relay();
         relay.setSerialNumber("device-5");

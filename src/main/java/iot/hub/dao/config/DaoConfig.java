@@ -1,4 +1,4 @@
-package iot.hub.config;
+package iot.hub.dao.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

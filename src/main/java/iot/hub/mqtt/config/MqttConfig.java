@@ -1,4 +1,4 @@
-package iot.hub.config;
+package iot.hub.mqtt.config;
 
 import org.eclipse.paho.client.mqttv3.IMqttClient;
 import org.eclipse.paho.client.mqttv3.MqttClient;

@@ -3,7 +3,7 @@ package iot.hub.model.device.actuator;
 import iot.hub.dao.deviceData.IDeviceDataDao;
 import iot.hub.model.device.AbstractDevice;
 import iot.hub.model.device.data.RelayData;
-import iot.hub.service.MessagingService;
+import iot.hub.mqtt.MessagingService;
 import lombok.NoArgsConstructor;
 import org.eclipse.paho.client.mqttv3.MqttException;
 

@@ -1,4 +1,4 @@
-package iot.hub.service;
+package iot.hub.mqtt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
@@ -38,6 +38,10 @@ public class MessagingService {
 
             device.changeData(data);
         });
+    }
+
+    public void unsubscribe(AbstractDevice device) throws MqttException {
+        mqttClient.unsubscribe(device.getFromDeviceTopic());
     }
 
 }

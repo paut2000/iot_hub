@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import iot.hub.dao.deviceData.IDeviceDataDao;
 import iot.hub.model.device.data.AbstractData;
-import iot.hub.service.MessagingService;
+import iot.hub.mqtt.MessagingService;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,6 +26,11 @@ public abstract class AbstractDevice {
     @Getter
     @Setter
     protected String serialNumber;
+
+    @Getter
+    @Setter
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    protected boolean isAlive = false;
 
     @Getter
     @Setter

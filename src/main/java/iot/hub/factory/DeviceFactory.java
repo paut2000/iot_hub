@@ -1,4 +1,4 @@
-package iot.hub.service.factory;
+package iot.hub.factory;
 
 import iot.hub.dao.deviceData.DHTDataDao;
 import iot.hub.dao.deviceData.RGBADataDao;
@@ -7,7 +7,7 @@ import iot.hub.model.device.AbstractDevice;
 import iot.hub.model.device.actuator.RGBAStrip;
 import iot.hub.model.device.actuator.Relay;
 import iot.hub.model.device.sensor.DHT;
-import iot.hub.service.MessagingService;
+import iot.hub.mqtt.MessagingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

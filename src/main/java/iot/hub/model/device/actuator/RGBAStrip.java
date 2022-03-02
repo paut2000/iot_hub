@@ -3,7 +3,7 @@ package iot.hub.model.device.actuator;
 import iot.hub.dao.deviceData.IDeviceDataDao;
 import iot.hub.model.device.AbstractDevice;
 import iot.hub.model.device.data.RGBAData;
-import iot.hub.service.MessagingService;
+import iot.hub.mqtt.MessagingService;
 import org.eclipse.paho.client.mqttv3.MqttException;
 
 import java.sql.Timestamp;
