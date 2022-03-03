@@ -1,6 +1,7 @@
 package iot.hub.model.device.sensor;
 
 import iot.hub.dao.deviceData.IDeviceDataDao;
+import iot.hub.exception.DiedDeviceException;
 import iot.hub.model.device.AbstractDevice;
 import iot.hub.model.device.data.DHTData;
 import iot.hub.mqtt.MessagingService;
@@ -17,7 +18,7 @@ public class DHT extends AbstractDevice implements ISensor {
     }
 
     @Override
-    public void changeUpdateFrequency(Integer milliSeconds) {
+    public void changeUpdateFrequency(Integer milliSeconds) throws DiedDeviceException {
 
     }
 

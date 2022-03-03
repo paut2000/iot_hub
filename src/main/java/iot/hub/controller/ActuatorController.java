@@ -1,5 +1,6 @@
 package iot.hub.controller;
 
+import iot.hub.exception.DiedDeviceException;
 import iot.hub.exception.InvalidCommandException;
 import iot.hub.exception.ResourceNotFoundException;
 import iot.hub.model.House;
@@ -23,7 +24,7 @@ public class ActuatorController {
             @PathVariable String roomName,
             @PathVariable String deviceId,
             @RequestParam(name = "action") String action
-    ) throws ResourceNotFoundException {
+    ) throws ResourceNotFoundException, DiedDeviceException {
         IActuator actuator = (IActuator) (house.getRoom(roomName).getDevice(deviceId));
         if (action.equals("enable")) actuator.enable();
         else if (action.equals("disable")) actuator.disable();
@@ -39,7 +40,7 @@ public class ActuatorController {
             @RequestParam(name = "green") Integer green,
             @RequestParam(name = "blue") Integer blue,
             @RequestParam(name = "alfa") Integer alfa
-    ) throws ResourceNotFoundException, ClassCastException {
+    ) throws ResourceNotFoundException, ClassCastException, DiedDeviceException {
         RGBAStrip rgba;
         rgba = (RGBAStrip) (house.getRoom(roomName).getDevice(deviceId));
         rgba.changeRGBA(new RGBAStripData(red, green, blue, alfa));

@@ -1,5 +1,6 @@
 package iot.hub.controller.exception;
 
+import iot.hub.exception.DiedDeviceException;
 import iot.hub.exception.InvalidCommandException;
 import iot.hub.exception.ResourceAlreadyExistException;
 import iot.hub.exception.ResourceNotFoundException;
@@ -24,13 +25,12 @@ public class ExceptionController extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response(exception.getMessage()));
     }
 
-    @ExceptionHandler(value = InvalidCommandException.class)
+    @ExceptionHandler(value = {
+            InvalidCommandException.class,
+            ClassCastException.class,
+            DiedDeviceException.class
+    })
     public ResponseEntity<Response> handlerInvalidCommandException(Exception exception) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response(exception.getMessage()));
-    }
-
-    @ExceptionHandler(value = ClassCastException.class)
-    public ResponseEntity<Response> handlerClassCastException(Exception exception) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response(exception.getMessage()));
     }
 
