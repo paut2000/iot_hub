@@ -20,20 +20,18 @@ public class DataController {
     @Autowired
     private House house;
 
-    @GetMapping("/data/{roomName}/{deviceId}")
+    @GetMapping("/data/{deviceId}")
     public ResponseEntity<AbstractData> getData(
-            @PathVariable String roomName,
             @PathVariable String deviceId
     ) throws ResourceNotFoundException {
-        return ResponseEntity.status(HttpStatus.OK).body(house.getRoom(roomName).getDevice(deviceId).getData());
+        return ResponseEntity.status(HttpStatus.OK).body(house.getDevice(deviceId).getData());
     }
 
-    @GetMapping("/statistic/{roomName}/{deviceId}")
+    @GetMapping("/statistic/{deviceId}")
     public ResponseEntity<ArrayList<? extends AbstractData>> getStatisticForDevice(
-            @PathVariable String roomName,
             @PathVariable String deviceId
     ) throws ResourceNotFoundException {
-        return ResponseEntity.status(HttpStatus.OK).body(house.getRoom(roomName).getDevice(deviceId).getSample());
+        return ResponseEntity.status(HttpStatus.OK).body(house.getDevice(deviceId).getSample());
     }
 
 }

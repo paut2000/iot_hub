@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import iot.hub.dao.RoomDao;
 import iot.hub.exception.ResourceAlreadyExistException;
 import iot.hub.exception.ResourceNotFoundException;
+import iot.hub.model.device.AbstractDevice;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -59,6 +60,15 @@ public class House {
         Room room = this.rooms.get(roomName);
         if (room == null) throw new ResourceNotFoundException("Комната " + roomName);
         return room;
+    }
+
+    @JsonIgnore
+    public AbstractDevice getDevice(String serialNumber) throws ResourceNotFoundException {
+        AbstractDevice device = null;
+        for (Room room : rooms.values()) {
+            device = room.getDevice(serialNumber);
+        }
+        return device;
     }
 
 }
