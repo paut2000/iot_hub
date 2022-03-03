@@ -11,14 +11,14 @@ import java.sql.Timestamp;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class RGBAData extends AbstractData {
+public class RGBAStripData extends AbstractData {
 
     private Integer red = 0;
     private Integer green = 0;
     private Integer blue = 0;
     private Integer alfa = 0;
 
-    public RGBAData(Timestamp datetime, Integer red, Integer green, Integer blue, Integer alfa) {
+    public RGBAStripData(Timestamp datetime, Integer red, Integer green, Integer blue, Integer alfa) {
         super(datetime);
         this.red = red;
         this.green = green;
@@ -28,9 +28,9 @@ public class RGBAData extends AbstractData {
 
     @Override
     public void changeData(AbstractData data) {
-        this.red = ((RGBAData) data).getRed();
-        this.green = ((RGBAData) data).getGreen();
-        this.blue = ((RGBAData) data).getBlue();
-        this.alfa = ((RGBAData) data).getAlfa();
+        this.red = ((RGBAStripData) data).getRed();
+        this.green = ((RGBAStripData) data).getGreen();
+        this.blue = ((RGBAStripData) data).getBlue();
+        this.alfa = ((RGBAStripData) data).getAlfa();
     }
 }

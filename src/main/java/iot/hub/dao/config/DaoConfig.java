@@ -1,5 +1,7 @@
 package iot.hub.dao.config;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,6 +12,8 @@ import java.sql.SQLException;
 
 @Configuration
 public class DaoConfig {
+
+    private static final Logger logger = LoggerFactory.getLogger(DaoConfig.class);
 
     @Bean
     public Connection connection(
@@ -25,12 +29,12 @@ public class DaoConfig {
 
             connection = DriverManager.getConnection(url, user, password);
 
-            System.out.println("Соединение с базой данных установлено: " + url);
+            logger.info("Соединение с базой данных установлено: " + url);
 
         } catch (ClassNotFoundException e) {
-            System.out.println("Ошибка загрузки драйвера базы данных: " + e.getMessage());
+            logger.error("Ошибка загрузки драйвера базы данных: " + e.getMessage());
         } catch (SQLException throwables) {
-            System.out.println("Ошибка подключения к базе данных: " + throwables.getMessage());
+            logger.error("Ошибка подключения к базе данных: " + throwables.getMessage());
         }
 
         return connection;

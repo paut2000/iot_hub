@@ -3,6 +3,8 @@ package iot.hub.dao.deviceData;
 import iot.hub.dao.AbstractDao;
 import iot.hub.model.device.AbstractDevice;
 import iot.hub.model.device.data.DHTData;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Component;
 
@@ -14,6 +16,8 @@ import java.util.ArrayList;
 @DependsOn({"tableCreator"})
 @Component
 public class DHTDataDao extends AbstractDao implements IDeviceDataDao {
+
+    private static final Logger logger = LoggerFactory.getLogger(DHTDataDao.class);
 
     @Override
     public ArrayList<DHTData> getByDevice(AbstractDevice device) {
@@ -37,7 +41,7 @@ public class DHTDataDao extends AbstractDao implements IDeviceDataDao {
                 resultArrayList.add(dhtData);
             }
         } catch (SQLException e) {
-            System.out.println("Ошибка при чтении из таблицы DHT: " + e.getMessage());
+            logger.error("Ошибка при чтении из таблицы DHT: " + e.getMessage());
         }
 
         return resultArrayList;
@@ -61,7 +65,7 @@ public class DHTDataDao extends AbstractDao implements IDeviceDataDao {
             statement.setString(4, device.getSerialNumber());
             statement.executeUpdate();
         } catch (SQLException e) {
-            System.out.println("Ошибка при сохранении в таблицу DHT: " + e.getMessage());
+            logger.error("Ошибка при сохранении в таблицу DHT: " + e.getMessage());
         }
     }
 }

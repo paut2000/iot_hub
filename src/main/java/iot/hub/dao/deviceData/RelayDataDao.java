@@ -4,6 +4,8 @@ import iot.hub.dao.AbstractDao;
 import iot.hub.model.device.AbstractDevice;
 import iot.hub.model.device.data.AbstractData;
 import iot.hub.model.device.data.RelayData;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Component;
 
@@ -15,6 +17,8 @@ import java.util.ArrayList;
 @DependsOn({"tableCreator"})
 @Component
 public class RelayDataDao extends AbstractDao implements IDeviceDataDao {
+
+    private static final Logger logger = LoggerFactory.getLogger(RelayDataDao.class);
 
     @Override
     public ArrayList<RelayData> getByDevice(AbstractDevice device) {
@@ -37,7 +41,7 @@ public class RelayDataDao extends AbstractDao implements IDeviceDataDao {
                 resultArrayList.add(relayData);
             }
         } catch (SQLException e) {
-            System.out.println("Ошибка при чтении из таблицы Relay: " + e.getMessage());
+            logger.error("Ошибка при чтении из таблицы Relay: " + e.getMessage());
         }
 
         return resultArrayList;
@@ -61,7 +65,7 @@ public class RelayDataDao extends AbstractDao implements IDeviceDataDao {
             statement.setString(3, device.getSerialNumber());
             statement.executeUpdate();
         } catch (SQLException e) {
-            System.out.println("Ошибка при сохранении в таблицу Relay: " + e.getMessage());
+            logger.error("Ошибка при сохранении в таблицу Relay: " + e.getMessage());
         }
     }
 }

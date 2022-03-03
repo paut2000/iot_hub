@@ -30,7 +30,7 @@ public abstract class AbstractDevice {
     @Getter
     @Setter
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    protected boolean isAlive = false;
+    protected boolean alive = false;
 
     @Getter
     @Setter

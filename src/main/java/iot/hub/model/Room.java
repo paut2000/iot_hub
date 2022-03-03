@@ -5,9 +5,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import iot.hub.dao.DeviceDao;
 import iot.hub.exception.ResourceNotFoundException;
 import iot.hub.model.device.AbstractDevice;
+import iot.hub.parser.AbstractDeviceJsonParser;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -26,6 +29,8 @@ public class Room {
     @JsonProperty("devices")
     private Map<String, AbstractDevice> abstractDevices = new LinkedHashMap<>();
 
+    private static final Logger logger = LoggerFactory.getLogger(Room.class);
+
     public Room(String name, DeviceDao deviceDao) {
         this.deviceDao = deviceDao;
         this.name = name;
@@ -34,7 +39,7 @@ public class Room {
     public void addDevice(AbstractDevice abstractDevice) {
         if (abstractDevices.containsKey(abstractDevice.getSerialNumber())) {
             abstractDevices.remove(abstractDevice.getSerialNumber());
-            System.out.println("Девайс " + abstractDevice.getSerialNumber() + " в комнате " + this.name
+            logger.info("Девайс " + abstractDevice.getSerialNumber() + " в комнате " + this.name
                     + " был отключён, но подключился снова");
         } else {
             deviceDao.save(this, abstractDevice);

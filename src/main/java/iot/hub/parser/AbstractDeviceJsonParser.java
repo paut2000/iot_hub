@@ -9,10 +9,14 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import iot.hub.model.device.AbstractDevice;
 import iot.hub.model.device.data.AbstractData;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
 public class AbstractDeviceJsonParser extends StdDeserializer<AbstractDevice> {
+
+    private static final Logger logger = LoggerFactory.getLogger(AbstractDeviceJsonParser.class);
 
     public AbstractDeviceJsonParser() {
         this(null);
@@ -41,7 +45,7 @@ public class AbstractDeviceJsonParser extends StdDeserializer<AbstractDevice> {
             try {
                 aClass = Class.forName("iot.hub.model.device.sensor." + type);
             } catch (ClassNotFoundException e) {
-                System.out.println("Нет такого девайса: " + type);
+                logger.info("Нет такого девайса: " + type);
             }
         }
 

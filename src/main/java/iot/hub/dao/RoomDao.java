@@ -1,6 +1,8 @@
 package iot.hub.dao;
 
 import iot.hub.model.Room;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Component;
@@ -16,6 +18,8 @@ public class RoomDao extends AbstractDao {
 
     @Autowired
     private DeviceDao deviceDao;
+
+    private static final Logger logger = LoggerFactory.getLogger(RoomDao.class);
 
     public void save(Room room) {
         try {
@@ -37,7 +41,20 @@ public class RoomDao extends AbstractDao {
             statement.setString(1, roomName);
             statement.executeUpdate();
         } catch (SQLException e) {
-            System.out.println("Ошибка при удалении из таблицы Rooms: " + e.getMessage());
+            logger.error("Ошибка при удалении из таблицы Rooms: " + e.getMessage());
+        }
+    }
+
+    public void update(String oldRoomName, String newRoomName) {
+        try {
+            statement = connection.prepareStatement(
+                    "UPDATE rooms SET name = ? where name = ?"
+            );
+            statement.setString(1, newRoomName);
+            statement.setString(2, oldRoomName);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            logger.error("Ошибка при обновлении данных из таблицы Rooms: " + e.getMessage());
         }
     }
 
@@ -55,7 +72,7 @@ public class RoomDao extends AbstractDao {
                 map.put(room.getName(), room);
             }
         } catch (SQLException e) {
-            System.out.println("Ошибка при чтении из таблицы Rooms: " + e.getMessage());
+            logger.error("Ошибка при чтении из таблицы Rooms: " + e.getMessage());
         }
 
         for (Room room : map.values()) {

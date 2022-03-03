@@ -2,7 +2,9 @@ package iot.hub.dao.deviceData;
 
 import iot.hub.dao.AbstractDao;
 import iot.hub.model.device.AbstractDevice;
-import iot.hub.model.device.data.RGBAData;
+import iot.hub.model.device.data.RGBAStripData;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Component;
 
@@ -15,9 +17,11 @@ import java.util.ArrayList;
 @Component
 public class RGBADataDao extends AbstractDao implements IDeviceDataDao {
 
+    private static final Logger logger = LoggerFactory.getLogger(RGBADataDao.class);
+
     @Override
-    public ArrayList<RGBAData> getByDevice(AbstractDevice device) {
-        ArrayList<RGBAData> resultArrayList = new ArrayList<>();
+    public ArrayList<RGBAStripData> getByDevice(AbstractDevice device) {
+        ArrayList<RGBAStripData> resultArrayList = new ArrayList<>();
 
         try {
             statement = connection.prepareStatement(
@@ -29,24 +33,24 @@ public class RGBADataDao extends AbstractDao implements IDeviceDataDao {
             ResultSet result = statement.executeQuery();
 
             while (result.next()) {
-                RGBAData rgbaData = new RGBAData(
+                RGBAStripData rgbaStripData = new RGBAStripData(
                         result.getTimestamp("datetime"),
                         result.getInt("red"),
                         result.getInt("green"),
                         result.getInt("blue"),
                         result.getInt("alfa")
                 );
-                resultArrayList.add(rgbaData);
+                resultArrayList.add(rgbaStripData);
             }
         } catch (SQLException e) {
-            System.out.println("Ошибка при чтении из таблицы RGBA: " + e.getMessage());
+            logger.error("Ошибка при чтении из таблицы RGBA: " + e.getMessage());
         }
 
         return resultArrayList;
     }
 
     @Override
-    public ArrayList<RGBAData> getByDeviceForPeriod(AbstractDevice device, Timestamp datetime) {
+    public ArrayList<RGBAStripData> getByDeviceForPeriod(AbstractDevice device, Timestamp datetime) {
         return null;
     }
 
@@ -58,14 +62,14 @@ public class RGBADataDao extends AbstractDao implements IDeviceDataDao {
                             "VALUES (?, ?, ?, ?, ?, (SELECT id FROM devices WHERE serial_number = ? AND device_type = 'RGBAStrip'))"
             );
             statement.setTimestamp(1, device.getData().getDatetime());
-            statement.setInt(2, ((RGBAData) device.getData()).getRed());
-            statement.setInt(3, ((RGBAData) device.getData()).getGreen());
-            statement.setInt(4, ((RGBAData) device.getData()).getBlue());
-            statement.setInt(5, ((RGBAData) device.getData()).getAlfa());
+            statement.setInt(2, ((RGBAStripData) device.getData()).getRed());
+            statement.setInt(3, ((RGBAStripData) device.getData()).getGreen());
+            statement.setInt(4, ((RGBAStripData) device.getData()).getBlue());
+            statement.setInt(5, ((RGBAStripData) device.getData()).getAlfa());
             statement.setString(6, device.getSerialNumber());
             statement.executeUpdate();
         } catch (SQLException e) {
-            System.out.println("Ошибка при сохранении в таблицу RGBA: " + e.getMessage());
+            logger.error("Ошибка при сохранении в таблицу RGBA: " + e.getMessage());
         }
     }
 }

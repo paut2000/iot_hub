@@ -1,5 +1,7 @@
 package iot.hub.dao;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -15,6 +17,8 @@ public class TableCreator implements CommandLineRunner {
     private Connection connection;
 
     private PreparedStatement statement = null;
+
+    private static final Logger logger = LoggerFactory.getLogger(TableCreator.class);
 
     @Override
     public void run(String... args) {
@@ -42,7 +46,7 @@ public class TableCreator implements CommandLineRunner {
             );
             statement.executeUpdate();
         } catch (SQLException e) {
-            System.out.println("Ошибка при создании таблицы Rooms: " + e.getMessage());
+            logger.error("Ошибка при создании таблицы Rooms: " + e.getMessage());
         }
     }
 
@@ -63,7 +67,7 @@ public class TableCreator implements CommandLineRunner {
             );
             statement.executeUpdate();
         } catch (SQLException e) {
-            System.out.println("Ошибка при создании таблицы Devices: " + e.getMessage());
+            logger.error("Ошибка при создании таблицы Devices: " + e.getMessage());
         }
     }
 
@@ -81,7 +85,7 @@ public class TableCreator implements CommandLineRunner {
             );
             statement.executeUpdate();
         } catch (SQLException e) {
-            System.out.println("Ошибка при создании таблицы Relay: " + e.getMessage());
+            logger.error("Ошибка при создании таблицы Relay: " + e.getMessage());
         }
     }
 
@@ -102,7 +106,7 @@ public class TableCreator implements CommandLineRunner {
             );
             statement.executeUpdate();
         } catch (SQLException e) {
-            System.out.println("Ошибка при создании таблицы RGBA: " + e.getMessage());
+            logger.error("Ошибка при создании таблицы RGBA: " + e.getMessage());
         }
     }
 
@@ -121,7 +125,7 @@ public class TableCreator implements CommandLineRunner {
             );
             statement.executeUpdate();
         } catch (SQLException e) {
-            System.out.println("Ошибка при создании таблицы DHT: " + e.getMessage());
+            logger.error("Ошибка при создании таблицы DHT: " + e.getMessage());
         }
     }
 

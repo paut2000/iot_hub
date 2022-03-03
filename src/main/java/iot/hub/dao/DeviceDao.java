@@ -3,6 +3,8 @@ package iot.hub.dao;
 import iot.hub.model.Room;
 import iot.hub.model.device.AbstractDevice;
 import iot.hub.factory.DeviceFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Component;
@@ -18,6 +20,8 @@ public class DeviceDao extends AbstractDao {
 
     @Autowired
     private DeviceFactory deviceFactory;
+
+    private static final Logger logger = LoggerFactory.getLogger(DeviceDao.class);
 
     public void save(Room room, AbstractDevice device) {
         try {
@@ -36,7 +40,7 @@ public class DeviceDao extends AbstractDao {
             statement.setString(5, room.getName());
             statement.executeUpdate();
         } catch (SQLException e) {
-            System.out.println("Ошибка при сохранении в таблицу Devices: " + e.getMessage());
+            logger.error("Ошибка при сохранении в таблицу Devices: " + e.getMessage());
         }
     }
 
@@ -57,9 +61,9 @@ public class DeviceDao extends AbstractDao {
             map = abstractDeviceResultSetToMap(result);
 
         } catch (SQLException e) {
-            System.out.println("Ошибка при чтении из таблицы Devices: " + e.getMessage());
+            logger.error("Ошибка при чтении из таблицы Devices: " + e.getMessage());
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            logger.error(e.getMessage());
         }
 
         return map;
@@ -84,9 +88,9 @@ public class DeviceDao extends AbstractDao {
             map = abstractDeviceResultSetToMap(result);
 
         } catch (SQLException e) {
-            System.out.println("Ошибка при чтении из таблицы Devices: " + e.getMessage());
+            logger.error("Ошибка при чтении из таблицы Devices: " + e.getMessage());
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            logger.error(e.getMessage());
         }
 
         return map;
@@ -113,7 +117,7 @@ public class DeviceDao extends AbstractDao {
             statement.setString(1, serialNumber);
             statement.executeUpdate();
         } catch (SQLException e) {
-            System.out.println("Ошибка при удалении из таблицы Devices: " + e.getMessage());
+            logger.error("Ошибка при удалении из таблицы Devices: " + e.getMessage());
         }
     }
 

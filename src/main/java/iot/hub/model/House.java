@@ -29,20 +29,29 @@ public class House {
         if (rooms.containsKey(room.getName())) {
             throw new ResourceAlreadyExistException("комната " + room.getName());
         }
-        else {
-            rooms.put(room.getName(), room);
-            roomDao.save(room);
-        }
+        roomDao.save(room);
+        rooms.put(room.getName(), room);
     }
 
-    public void removeRoom(String roomName) throws ResourceNotFoundException {
-        if (rooms.containsKey(roomName)) {
-            rooms.remove(roomName);
-            roomDao.delete(roomName);
-        }
-        else {
+    public Room removeRoom(String roomName) throws ResourceNotFoundException {
+        if (!rooms.containsKey(roomName)) {
             throw new ResourceNotFoundException("комната " + roomName);
         }
+        roomDao.delete(roomName);
+        return rooms.remove(roomName);
+    }
+
+    public void updateRoom(String oldRoomName, String newRoomName) throws ResourceNotFoundException, ResourceAlreadyExistException {
+        if (!rooms.containsKey(oldRoomName)) {
+            throw new ResourceNotFoundException("комната " + oldRoomName);
+        }
+        if (rooms.containsKey(newRoomName)) {
+            throw new ResourceAlreadyExistException("комната " + newRoomName);
+        }
+        roomDao.update(oldRoomName, newRoomName);
+        Room room = rooms.remove(oldRoomName);
+        room.setName(newRoomName);
+        rooms.put(newRoomName, room);
     }
 
     @JsonIgnore

@@ -7,12 +7,16 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import iot.hub.model.device.data.AbstractData;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
 public class DeviceDataJsonParser extends StdDeserializer<AbstractData> {
 
     private String type;
+
+    private static final Logger logger = LoggerFactory.getLogger(DeviceDataJsonParser.class);
 
     public DeviceDataJsonParser(String type) {
         super((Class<?>) null);
@@ -25,7 +29,7 @@ public class DeviceDataJsonParser extends StdDeserializer<AbstractData> {
         try {
             aClass = Class.forName("iot.hub.model.device.data." + type + "Data");
         } catch (ClassNotFoundException e) {
-            System.out.println("Нет такого типа данных девайса: " + type + "Data");
+            logger.error("Нет такого типа данных девайса: " + type + "Data");
         }
 
         JsonNode node = jsonParser.getCodec().readTree(jsonParser);

@@ -1,6 +1,7 @@
 package iot.hub.mqtt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import iot.hub.controller.HouseController;
 import iot.hub.exception.ResourceNotFoundException;
 import iot.hub.model.House;
 import iot.hub.model.device.AbstractDevice;
@@ -8,12 +9,16 @@ import iot.hub.factory.DeviceFactory;
 import iot.hub.mqtt.message.DiedDeviceMessage;
 import iot.hub.mqtt.message.NewDeviceMessage;
 import org.eclipse.paho.client.mqttv3.MqttException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 @Component
 public class MqttSubscriber implements CommandLineRunner {
+
+    private static final Logger logger = LoggerFactory.getLogger(MqttSubscriber.class);
 
     @Override
     public void run(String... args) {
@@ -49,14 +54,14 @@ public class MqttSubscriber implements CommandLineRunner {
 
                 try {
                     house.getRoom(roomName).addDevice(device);
-                    System.out.println("new :: topic:" + t + "payload" + p);
+                    logger.info("new :: topic:" + t + "payload" + p);
                 } catch (ResourceNotFoundException e) {
-                    System.out.println(e.getMessage());
+                    logger.info(e.getMessage());
                 }
             });
 
         } catch (MqttException | InterruptedException e) {
-            System.out.println("Не удалось получить инофрмацию о новом девайсе: " + e.getMessage());
+            logger.error("Не удалось получить инофрмацию о новом девайсе: " + e.getMessage());
         }
     }
 
@@ -78,10 +83,10 @@ public class MqttSubscriber implements CommandLineRunner {
                     System.out.println(e.getMessage());
                 }
 
-                System.out.println("died :: topic:" + t + "payload" + p);
+                logger.info("died :: topic: " + t + " payload " + p);
             });
         } catch (MqttException | InterruptedException e) {
-            System.out.println("Не удалось получить инофрмацию о помершем девайсе: " + e.getMessage());
+            logger.error("Не удалось получить инофрмацию о помершем девайсе: " + e.getMessage());
         }
     }
 
