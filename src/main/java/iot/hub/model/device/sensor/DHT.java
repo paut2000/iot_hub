@@ -6,8 +6,10 @@ import iot.hub.model.device.AbstractDevice;
 import iot.hub.model.device.data.DHTData;
 import iot.hub.mqtt.MessagingService;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+@NoArgsConstructor
 @Getter
 @Setter
 public class DHT extends AbstractDevice implements ISensor {

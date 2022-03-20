@@ -1,11 +1,10 @@
 package iot.hub.mqtt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import iot.hub.controller.HouseController;
 import iot.hub.exception.ResourceNotFoundException;
+import iot.hub.factory.DeviceFactory;
 import iot.hub.model.House;
 import iot.hub.model.device.AbstractDevice;
-import iot.hub.factory.DeviceFactory;
 import iot.hub.mqtt.message.DiedDeviceMessage;
 import iot.hub.mqtt.message.NewDeviceMessage;
 import org.eclipse.paho.client.mqttv3.MqttException;
@@ -42,7 +41,6 @@ public class MqttSubscriber implements CommandLineRunner {
                 NewDeviceMessage newDeviceMessage = new ObjectMapper()
                         .readerFor(NewDeviceMessage.class)
                         .readValue(p.toString());
-                String roomName = newDeviceMessage.getRoomName();
                 AbstractDevice device = deviceFactory.injectDependencies(newDeviceMessage.getDevice());
 
                 // Заполняет поле datetime и сохраняет в БД
@@ -52,12 +50,8 @@ public class MqttSubscriber implements CommandLineRunner {
 
                 device.setAlive(true);
 
-                try {
-                    house.getRoom(roomName).addDevice(device);
-                    logger.info("new :: topic:" + t + "payload" + p);
-                } catch (ResourceNotFoundException e) {
-                    logger.info(e.getMessage());
-                }
+                house.addDevice(device);
+                logger.info("new :: topic:\n" + t + "\npayload:\n" + p);
             });
 
         } catch (MqttException | InterruptedException e) {
@@ -72,18 +66,17 @@ public class MqttSubscriber implements CommandLineRunner {
                         .readerFor(DiedDeviceMessage.class)
                         .readValue(p.toString());
 
-                String roomName = diedDeviceMessage.getRoomName();
                 String serialNumber = diedDeviceMessage.getSerialNumber();
 
                 try {
-                    AbstractDevice device = house.getRoom(roomName).getDevice(serialNumber);
+                    AbstractDevice device = house.getDevice(serialNumber);
                     device.setAlive(false);
                     messagingService.unsubscribe(device);
                 } catch (ResourceNotFoundException e) {
                     System.out.println(e.getMessage());
                 }
 
-                logger.info("died :: topic: " + t + " payload " + p);
+                logger.info("died :: topic:\n" + t + "\npayload:\n" + p);
             });
         } catch (MqttException | InterruptedException e) {
             logger.error("Не удалось получить инофрмацию о помершем девайсе: " + e.getMessage());

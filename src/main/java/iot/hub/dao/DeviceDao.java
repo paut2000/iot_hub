@@ -1,8 +1,7 @@
 package iot.hub.dao;
 
-import iot.hub.model.Room;
-import iot.hub.model.device.AbstractDevice;
 import iot.hub.factory.DeviceFactory;
+import iot.hub.model.device.AbstractDevice;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,21 +22,19 @@ public class DeviceDao extends AbstractDao {
 
     private static final Logger logger = LoggerFactory.getLogger(DeviceDao.class);
 
-    public void save(Room room, AbstractDevice device) {
+    public void save(AbstractDevice device) {
         try {
             statement = connection.prepareStatement(
                     "INSERT INTO devices (serial_number, \n" +
                             "                     device_type, \n" +
                             "                     to_device_topic, \n" +
-                            "                     from_device_topic, \n" +
-                            "                     room_id)\n" +
-                            "VALUES (?, ?, ?, ?, (SELECT id FROM rooms WHERE name = ?))"
+                            "                     from_device_topic)\n" +
+                            "VALUES (?, ?, ?, ?)"
             );
             statement.setString(1, device.getSerialNumber());
             statement.setString(2, device.getType());
             statement.setString(3, device.getToDeviceTopic());
             statement.setString(4, device.getFromDeviceTopic());
-            statement.setString(5, room.getName());
             statement.executeUpdate();
         } catch (SQLException e) {
             logger.error("Ошибка при сохранении в таблицу Devices: " + e.getMessage());
@@ -49,40 +46,12 @@ public class DeviceDao extends AbstractDao {
 
         try {
             statement = connection.prepareStatement(
-                    "SELECT (serial_number,\n" +
-                            "        device_type,\n" +
-                            "        to_device_topic,\n" +
-                            "        from_device_topic,\n" +
-                            "        room_id)\n" +
-                            "    FROM devices"
-            );
-            ResultSet result = statement.executeQuery();
-
-            map = abstractDeviceResultSetToMap(result);
-
-        } catch (SQLException e) {
-            logger.error("Ошибка при чтении из таблицы Devices: " + e.getMessage());
-        } catch (Exception e) {
-            logger.error(e.getMessage());
-        }
-
-        return map;
-    }
-
-    public Map<String, AbstractDevice> findByRoom(Room room) {
-        Map<String, AbstractDevice> map = null;
-
-        try {
-            statement = connection.prepareStatement(
                     "SELECT serial_number,\n" +
                             "        device_type,\n" +
                             "        to_device_topic,\n" +
-                            "        from_device_topic,\n" +
-                            "        room_id\n" +
-                            "FROM devices WHERE room_id = (SELECT id FROM rooms WHERE rooms.name = ?)"
+                            "        from_device_topic\n" +
+                            "    FROM devices"
             );
-            statement.setString(1, room.getName());
-
             ResultSet result = statement.executeQuery();
 
             map = abstractDeviceResultSetToMap(result);

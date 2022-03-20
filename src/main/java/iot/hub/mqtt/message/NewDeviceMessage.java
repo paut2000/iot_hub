@@ -10,11 +10,9 @@ import lombok.Setter;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
 @Setter
+@Getter
 public class NewDeviceMessage {
-
-    private String roomName;
 
     @JsonDeserialize(using = AbstractDeviceJsonParser.class)
     private AbstractDevice device;

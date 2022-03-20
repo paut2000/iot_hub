@@ -1,11 +1,12 @@
 package iot.hub.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import iot.hub.dao.RoomDao;
-import iot.hub.exception.ResourceAlreadyExistException;
+import iot.hub.dao.DeviceDao;
 import iot.hub.exception.ResourceNotFoundException;
 import iot.hub.model.device.AbstractDevice;
 import lombok.Getter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -16,60 +17,39 @@ import java.util.Map;
 public class House {
 
     @Getter
-    private Map<String, Room> rooms;
+    private Map<String, AbstractDevice> devices;
 
     @Autowired
-    private RoomDao roomDao;
+    private DeviceDao deviceDao;
+
+    private static final Logger logger = LoggerFactory.getLogger(House.class);
 
     @PostConstruct
     private void postConstructor() {
-        rooms = roomDao.findAll();
+        devices = deviceDao.findAll();
     }
 
-    public void addRoom(Room room) throws ResourceAlreadyExistException {
-        if (rooms.containsKey(room.getName())) {
-            throw new ResourceAlreadyExistException("комната " + room.getName());
+    public void addDevice(AbstractDevice abstractDevice) {
+        if (devices.containsKey(abstractDevice.getSerialNumber())) {
+            devices.remove(abstractDevice.getSerialNumber());
+            logger.info("Девайс " + abstractDevice.getSerialNumber() + " был отключён, но подключился снова");
+        } else {
+            deviceDao.save(abstractDevice);
         }
-        roomDao.save(room);
-        rooms.put(room.getName(), room);
+        devices.put(abstractDevice.getSerialNumber(), abstractDevice);
     }
 
-    public Room removeRoom(String roomName) throws ResourceNotFoundException {
-        if (!rooms.containsKey(roomName)) {
-            throw new ResourceNotFoundException("комната " + roomName);
-        }
-        roomDao.delete(roomName);
-        return rooms.remove(roomName);
-    }
-
-    public void updateRoom(String oldRoomName, String newRoomName) throws ResourceNotFoundException, ResourceAlreadyExistException {
-        if (!rooms.containsKey(oldRoomName)) {
-            throw new ResourceNotFoundException("комната " + oldRoomName);
-        }
-        if (rooms.containsKey(newRoomName)) {
-            throw new ResourceAlreadyExistException("комната " + newRoomName);
-        }
-        roomDao.update(oldRoomName, newRoomName);
-        Room room = rooms.remove(oldRoomName);
-        room.setName(newRoomName);
-        rooms.put(newRoomName, room);
-    }
-
-    @JsonIgnore
-    public Room getRoom(String roomName) throws ResourceNotFoundException {
-        Room room = this.rooms.get(roomName);
-        if (room == null) throw new ResourceNotFoundException("Комната " + roomName);
-        return room;
+    public void removeDevice(AbstractDevice abstractDevice) {
+        //Не удаляет связанные дейвайсы
+        devices.remove(abstractDevice.getSerialNumber());
+        deviceDao.delete(abstractDevice.getSerialNumber());
     }
 
     @JsonIgnore
     public AbstractDevice getDevice(String serialNumber) throws ResourceNotFoundException {
-        for (Room room : rooms.values()) {
-            if (room.getAbstractDevices().containsKey(serialNumber)) {
-                return room.getAbstractDevices().get(serialNumber);
-            }
-        }
-        throw new ResourceNotFoundException("Девайс " + serialNumber);
+        AbstractDevice device = this.devices.get(serialNumber);
+        if (device == null) throw new ResourceNotFoundException("Девайс " + serialNumber);
+        return device;
     }
 
 }

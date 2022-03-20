@@ -23,7 +23,6 @@ public class TableCreator implements CommandLineRunner {
     @Override
     public void run(String... args) {
         // Основные таблицы
-        createRoomTable();
         createDeviceTable();
 
         // Таблицы актуаторов
@@ -32,22 +31,6 @@ public class TableCreator implements CommandLineRunner {
 
         // Таблицы сенсоров
         createDHTTable();
-    }
-
-    private void createRoomTable() {
-        try {
-            statement = connection.prepareStatement(
-                    "CREATE TABLE IF NOT EXISTS rooms (\n" +
-                            "    id SERIAL,\n" +
-                            "    name TEXT NOT NULL,\n" +
-                            "    CONSTRAINT pk_room PRIMARY KEY (id),\n" +
-                            "    CONSTRAINT u_name UNIQUE (name)\n" +
-                            ")"
-            );
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            logger.error("Ошибка при создании таблицы Rooms: " + e.getMessage());
-        }
     }
 
     private void createDeviceTable() {
@@ -59,10 +42,8 @@ public class TableCreator implements CommandLineRunner {
                             "    device_type TEXT,\n" +
                             "    to_device_topic TEXT,\n" +
                             "    from_device_topic TEXT,\n" +
-                            "    room_id INTEGER,\n" +
                             "    CONSTRAINT pk_device PRIMARY KEY (id),\n" +
-                            "    CONSTRAINT u_device UNIQUE (serial_number),\n" +
-                            "    CONSTRAINT fk_room FOREIGN KEY (room_id) REFERENCES rooms (id)\n" +
+                            "    CONSTRAINT u_device UNIQUE (serial_number)\n" +
                             ")"
             );
             statement.executeUpdate();
