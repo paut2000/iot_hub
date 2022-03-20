@@ -1,7 +1,6 @@
 package iot.hub.controller.exception;
 
 import iot.hub.exception.DiedDeviceException;
-import iot.hub.exception.InvalidCommandException;
 import iot.hub.exception.ResourceAlreadyExistException;
 import iot.hub.exception.ResourceNotFoundException;
 import lombok.AllArgsConstructor;
@@ -26,7 +25,6 @@ public class ExceptionController extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(value = {
-            InvalidCommandException.class,
             ClassCastException.class,
             DiedDeviceException.class
     })

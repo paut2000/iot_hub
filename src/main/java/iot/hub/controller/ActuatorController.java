@@ -1,7 +1,6 @@
 package iot.hub.controller;
 
 import iot.hub.exception.DiedDeviceException;
-import iot.hub.exception.InvalidCommandException;
 import iot.hub.exception.ResourceNotFoundException;
 import iot.hub.model.House;
 import iot.hub.model.device.actuator.AbstractActuator;
@@ -27,29 +26,32 @@ public class ActuatorController {
         return house;
     }
 
-    @PostMapping("/control/actuator/{deviceId}")
-    public ResponseEntity<AbstractActuator> control(
-            @PathVariable String deviceId,
-            @RequestParam(name = "action") String action
+    @PostMapping("/control/actuator/disable/{deviceId}")
+    public ResponseEntity<AbstractActuator> disable(
+            @PathVariable String deviceId
     ) throws ResourceNotFoundException, DiedDeviceException {
         AbstractActuator actuator = (AbstractActuator) (house.getDevice(deviceId));
-        if (action.equals("enable")) actuator.enable();
-        else if (action.equals("disable")) actuator.disable();
-        else throw new InvalidCommandException(action);
+        actuator.disable();
+        return ResponseEntity.status(HttpStatus.OK).body(actuator);
+    }
+
+    @PostMapping("/control/actuator/enable/{deviceId}")
+    public ResponseEntity<AbstractActuator> enable(
+            @PathVariable String deviceId
+    ) throws ResourceNotFoundException, DiedDeviceException {
+        AbstractActuator actuator = (AbstractActuator) (house.getDevice(deviceId));
+        actuator.enable();
         return ResponseEntity.status(HttpStatus.OK).body(actuator);
     }
 
     @PostMapping("/control/rgba/{deviceId}")
     public ResponseEntity<RGBAStrip> rgba(
             @PathVariable String deviceId,
-            @RequestParam(name = "red") Integer red,
-            @RequestParam(name = "green") Integer green,
-            @RequestParam(name = "blue") Integer blue,
-            @RequestParam(name = "alfa") Integer alfa
+            @RequestBody RGBAStripData data
     ) throws ResourceNotFoundException, ClassCastException, DiedDeviceException {
         RGBAStrip rgba;
         rgba = (RGBAStrip) (house.getDevice(deviceId));
-        rgba.changeRGBA(new RGBAStripData(red, green, blue, alfa));
+        rgba.changeRGBA(data);
         return ResponseEntity.status(HttpStatus.OK).body(rgba);
     }
 
