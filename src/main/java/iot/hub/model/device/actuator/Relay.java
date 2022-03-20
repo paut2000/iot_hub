@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 import java.sql.Timestamp;
 
 @NoArgsConstructor
-public class Relay extends AbstractDevice implements IActuator {
+public class Relay extends AbstractActuator {
 
     private static final Logger logger = LoggerFactory.getLogger(Relay.class);
 

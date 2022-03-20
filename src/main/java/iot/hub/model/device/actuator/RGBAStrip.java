@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 import java.sql.Timestamp;
 
 @NoArgsConstructor
-public class RGBAStrip extends AbstractDevice implements IActuator {
+public class RGBAStrip extends AbstractActuator {
 
     private static final Logger logger = LoggerFactory.getLogger(RGBAStrip.class);
 

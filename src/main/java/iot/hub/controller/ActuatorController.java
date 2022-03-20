@@ -4,7 +4,7 @@ import iot.hub.exception.DiedDeviceException;
 import iot.hub.exception.InvalidCommandException;
 import iot.hub.exception.ResourceNotFoundException;
 import iot.hub.model.House;
-import iot.hub.model.device.actuator.IActuator;
+import iot.hub.model.device.actuator.AbstractActuator;
 import iot.hub.model.device.actuator.RGBAStrip;
 import iot.hub.model.device.data.RGBAStripData;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,11 +28,11 @@ public class ActuatorController {
     }
 
     @PostMapping("/control/actuator/{deviceId}")
-    public ResponseEntity<IActuator> control(
+    public ResponseEntity<AbstractActuator> control(
             @PathVariable String deviceId,
             @RequestParam(name = "action") String action
     ) throws ResourceNotFoundException, DiedDeviceException {
-        IActuator actuator = (IActuator) (house.getDevice(deviceId));
+        AbstractActuator actuator = (AbstractActuator) (house.getDevice(deviceId));
         if (action.equals("enable")) actuator.enable();
         else if (action.equals("disable")) actuator.disable();
         else throw new InvalidCommandException(action);
