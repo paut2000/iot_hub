@@ -64,11 +64,12 @@ public class House {
 
     @JsonIgnore
     public AbstractDevice getDevice(String serialNumber) throws ResourceNotFoundException {
-        AbstractDevice device = null;
         for (Room room : rooms.values()) {
-            device = room.getDevice(serialNumber);
+            if (room.getAbstractDevices().containsKey(serialNumber)) {
+                return room.getAbstractDevices().get(serialNumber);
+            }
         }
-        return device;
+        throw new ResourceNotFoundException("Девайс " + serialNumber);
     }
 
 }

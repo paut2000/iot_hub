@@ -29,6 +29,13 @@ public class HouseController {
         return house;
     }
 
+    @GetMapping("/house/room/{roomName}")
+    public ResponseEntity<Room> getRoom(
+            @PathVariable("roomName") String roomName
+    ) throws ResourceNotFoundException {
+        return ResponseEntity.status(HttpStatus.OK).body(house.getRoom(roomName));
+    }
+
     @PostMapping("/house/room")
     public ResponseEntity<Room> addRoom(
             @RequestParam(value = "roomName") String roomName

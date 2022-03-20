@@ -10,7 +10,7 @@ import org.junit.Assert;
 
 public class ParserTest {
 
-    @Test
+    /*@Test
     public void NewDeviceInfoJsonParserTest() throws JsonProcessingException {
 
         String payload = "{\n" +
@@ -50,6 +50,6 @@ public class ParserTest {
         expectedDeviceInfo.setDevice(relay);
 
         Assert.assertEquals(expectedDeviceInfo, actualDeviceInfo);
-    }
+    }*/
 
 }

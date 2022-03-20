@@ -4,7 +4,6 @@ import iot.hub.exception.DiedDeviceException;
 import iot.hub.exception.InvalidCommandException;
 import iot.hub.exception.ResourceNotFoundException;
 import iot.hub.model.House;
-import iot.hub.model.Room;
 import iot.hub.model.device.actuator.IActuator;
 import iot.hub.model.device.actuator.RGBAStrip;
 import iot.hub.model.device.data.RGBAStripData;
