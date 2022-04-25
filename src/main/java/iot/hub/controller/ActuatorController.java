@@ -18,10 +18,8 @@ public class ActuatorController {
     @Autowired
     private House house;
 
-    @PostMapping("/control/actuator")
-    public House controlAll(
-            @RequestParam(name = "action") String action
-    ) {
+    @PostMapping("/control/actuator/disable")
+    public House disableAll() {
 
         return house;
     }
@@ -52,6 +50,17 @@ public class ActuatorController {
         RGBAStrip rgba;
         rgba = (RGBAStrip) (house.getDevice(deviceId));
         rgba.changeRGBA(data);
+        return ResponseEntity.status(HttpStatus.OK).body(rgba);
+    }
+
+    @PostMapping("/control/rgba/nosave/{deviceId}")
+    public ResponseEntity<RGBAStrip> rgbaNoSave(
+            @PathVariable String deviceId,
+            @RequestBody RGBAStripData data
+    ) throws ResourceNotFoundException, ClassCastException, DiedDeviceException {
+        RGBAStrip rgba;
+        rgba = (RGBAStrip) (house.getDevice(deviceId));
+        rgba.changeRGBAWithoutSave(data);
         return ResponseEntity.status(HttpStatus.OK).body(rgba);
     }
 

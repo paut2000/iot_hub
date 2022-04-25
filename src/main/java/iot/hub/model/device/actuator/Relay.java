@@ -1,5 +1,7 @@
 package iot.hub.model.device.actuator;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import iot.hub.dao.deviceData.IDeviceDataDao;
 import iot.hub.exception.DiedDeviceException;
 import iot.hub.model.device.AbstractDevice;
@@ -28,11 +30,11 @@ public class Relay extends AbstractActuator {
             throw new DiedDeviceException(serialNumber);
         }
         try {
-            this.messagingService.publish(this.toDeviceTopic, "{\"action\":\"enable\"}", 2, false);
             ((RelayData) this.data).setStatus(true);
+            this.messagingService.publish(this.toDeviceTopic, new ObjectMapper().writeValueAsString(data), 2, false);
             this.data.setDatetime(new Timestamp(System.currentTimeMillis()));
             this.dataDao.save(this);
-        } catch (MqttException e) {
+        } catch (MqttException | JsonProcessingException e) {
             logger.error("Метод enable(): " + e.getMessage());
         }
     }
@@ -43,11 +45,11 @@ public class Relay extends AbstractActuator {
             throw new DiedDeviceException(serialNumber);
         }
         try {
-            this.messagingService.publish(this.toDeviceTopic, "{\"action\":\"disable\"}", 2, false);
             ((RelayData) this.data).setStatus(false);
+            this.messagingService.publish(this.toDeviceTopic, new ObjectMapper().writeValueAsString(data), 2, false);
             this.data.setDatetime(new Timestamp(System.currentTimeMillis()));
             this.dataDao.save(this);
-        } catch (MqttException e) {
+        } catch (MqttException | JsonProcessingException e) {
             logger.error("Метод disable(): " + e.getMessage());
         }
     }

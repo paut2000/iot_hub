@@ -1,5 +1,7 @@
 package iot.hub.model.device.actuator;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import iot.hub.dao.deviceData.IDeviceDataDao;
 import iot.hub.exception.DiedDeviceException;
 import iot.hub.model.device.AbstractDevice;
@@ -28,14 +30,14 @@ public class RGBAStrip extends AbstractActuator {
             throw new DiedDeviceException(serialNumber);
         }
         try {
-            this.messagingService.publish(this.toDeviceTopic, new RGBAStripData(255,255,255, 255).toString(), 2, false);
             ((RGBAStripData) this.data).setRed(255);
             ((RGBAStripData) this.data).setGreen(255);
             ((RGBAStripData) this.data).setBlue(255);
             ((RGBAStripData) this.data).setAlfa(255);
+            this.messagingService.publish(this.toDeviceTopic, new ObjectMapper().writeValueAsString(data), 2, false);
             this.data.setDatetime(new Timestamp(System.currentTimeMillis()));
             this.dataDao.save(this);
-        } catch (MqttException e) {
+        } catch (MqttException | JsonProcessingException e) {
             logger.error("Метод enable(): " + e.getMessage());
         }
     }
@@ -46,31 +48,39 @@ public class RGBAStrip extends AbstractActuator {
             throw new DiedDeviceException(serialNumber);
         }
         try {
-            this.messagingService.publish(this.toDeviceTopic, new RGBAStripData(0,0,0, 0).toString(), 2, false);
             ((RGBAStripData) this.data).setRed(0);
             ((RGBAStripData) this.data).setGreen(0);
             ((RGBAStripData) this.data).setBlue(0);
             ((RGBAStripData) this.data).setAlfa(0);
+            this.messagingService.publish(this.toDeviceTopic, new ObjectMapper().writeValueAsString(data), 2, false);
             this.data.setDatetime(new Timestamp(System.currentTimeMillis()));
             this.dataDao.save(this);
-        } catch (MqttException e) {
+        } catch (MqttException | JsonProcessingException e) {
             logger.error("Метод enable(): " + e.getMessage());
         }
     }
 
     public void changeRGBA(RGBAStripData rgbaStripData) throws DiedDeviceException {
+        change(rgbaStripData);
+        this.data.setDatetime(new Timestamp(System.currentTimeMillis()));
+        this.dataDao.save(this);
+    }
+
+    public void changeRGBAWithoutSave(RGBAStripData rgbaStripData) throws DiedDeviceException {
+        change(rgbaStripData);
+    }
+
+    public void change(RGBAStripData rgbaStripData) throws DiedDeviceException {
         if (alive == false) {
             throw new DiedDeviceException(serialNumber);
         }
         try {
-            this.messagingService.publish(this.toDeviceTopic, rgbaStripData.toString(), 2, false);
             ((RGBAStripData) this.data).setRed(rgbaStripData.getRed());
             ((RGBAStripData) this.data).setGreen(rgbaStripData.getGreen());
             ((RGBAStripData) this.data).setBlue(rgbaStripData.getBlue());
             ((RGBAStripData) this.data).setAlfa(rgbaStripData.getAlfa());
-            this.data.setDatetime(new Timestamp(System.currentTimeMillis()));
-            this.dataDao.save(this);
-        } catch (MqttException e) {
+            this.messagingService.publish(this.toDeviceTopic, new ObjectMapper().writeValueAsString(data), 2, false);
+        } catch (MqttException | JsonProcessingException e) {
             logger.error("Метод changeRGBA(): " + e.getMessage());
         }
     }
