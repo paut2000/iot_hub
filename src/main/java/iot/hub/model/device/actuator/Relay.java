@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import iot.hub.dao.deviceData.IDeviceDataDao;
 import iot.hub.exception.DiedDeviceException;
-import iot.hub.model.device.AbstractDevice;
 import iot.hub.model.device.data.RelayData;
 import iot.hub.mqtt.MessagingService;
 import lombok.NoArgsConstructor;
@@ -21,7 +20,6 @@ public class Relay extends AbstractActuator {
 
     public Relay(MessagingService messagingService, IDeviceDataDao dataDao) {
         super(messagingService, dataDao);
-        this.data = new RelayData();
     }
 
     @Override

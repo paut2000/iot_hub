@@ -2,7 +2,6 @@ package iot.hub.model.device.sensor;
 
 import iot.hub.dao.deviceData.IDeviceDataDao;
 import iot.hub.exception.DiedDeviceException;
-import iot.hub.model.device.data.DHTData;
 import iot.hub.mqtt.MessagingService;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,7 +14,6 @@ public class DHT extends AbstractSensor {
 
     public DHT(MessagingService messagingService, IDeviceDataDao dataDao) {
         super(messagingService, dataDao);
-        this.data = new DHTData();
     }
 
     @Override

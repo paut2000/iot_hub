@@ -1,5 +1,6 @@
 package iot.hub.dao;
 
+import iot.hub.dao.deviceData.IDeviceDataDao;
 import iot.hub.factory.DeviceFactory;
 import iot.hub.model.device.AbstractDevice;
 import org.slf4j.Logger;
@@ -73,6 +74,7 @@ public class DeviceDao extends AbstractDao {
             device.setType(result.getString("device_type"));
             device.setToDeviceTopic(result.getString("to_device_topic"));
             device.setFromDeviceTopic(result.getString("from_device_topic"));
+            device.fillLastData();
             map.put(device.getSerialNumber(), device);
         }
         return map;

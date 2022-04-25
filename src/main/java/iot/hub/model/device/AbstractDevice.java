@@ -55,6 +55,10 @@ public abstract class AbstractDevice {
         this.dataDao = dataDao;
     }
 
+    public void fillLastData() {
+        this.data = this.dataDao.getLastByDevice(this);
+    }
+
     @JsonIgnore
     public ArrayList<? extends AbstractData> getSample() {
         return dataDao.getByDevice(this);

@@ -2,6 +2,7 @@ package iot.hub.dao.deviceData;
 
 import iot.hub.dao.AbstractDao;
 import iot.hub.model.device.AbstractDevice;
+import iot.hub.model.device.data.AbstractData;
 import iot.hub.model.device.data.DHTData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +19,32 @@ import java.util.ArrayList;
 public class DHTDataDao extends AbstractDao implements IDeviceDataDao {
 
     private static final Logger logger = LoggerFactory.getLogger(DHTDataDao.class);
+
+    @Override
+    public AbstractData getLastByDevice(AbstractDevice device) {
+        DHTData dhtData = new DHTData();
+
+        try {
+            statement = connection.prepareStatement(
+                    "select datetime, humidity, temperature from dht where datetime = (\n" +
+                            "    select max(datetime) from dht inner join devices d on d.id = dht.device_id\n" +
+                            "    where serial_number = ?\n" +
+                            ")"
+            );
+            statement.setString(1, device.getSerialNumber());
+            ResultSet result = statement.executeQuery();
+
+            if (result.next()) {
+                dhtData.setDatetime(result.getTimestamp("datetime"));
+                dhtData.setHumidity(result.getDouble("humidity"));
+                dhtData.setTemperature(result.getDouble("temperature"));
+            }
+        } catch (SQLException e) {
+            logger.error("Ошибка при чтении из таблицы DHT: " + e.getMessage());
+        }
+
+        return dhtData;
+    }
 
     @Override
     public ArrayList<DHTData> getByDevice(AbstractDevice device) {

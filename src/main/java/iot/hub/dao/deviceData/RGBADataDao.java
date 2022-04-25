@@ -2,6 +2,8 @@ package iot.hub.dao.deviceData;
 
 import iot.hub.dao.AbstractDao;
 import iot.hub.model.device.AbstractDevice;
+import iot.hub.model.device.data.AbstractData;
+import iot.hub.model.device.data.DHTData;
 import iot.hub.model.device.data.RGBAStripData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +20,34 @@ import java.util.ArrayList;
 public class RGBADataDao extends AbstractDao implements IDeviceDataDao {
 
     private static final Logger logger = LoggerFactory.getLogger(RGBADataDao.class);
+
+    @Override
+    public AbstractData getLastByDevice(AbstractDevice device) {
+        RGBAStripData rgbaStripData = new RGBAStripData();
+
+        try {
+            statement = connection.prepareStatement(
+                    "select datetime, red, green, blue, alfa from rgba where datetime = (\n" +
+                            "    select max(datetime) from rgba inner join devices d on d.id = rgba.device_id\n" +
+                            "    where serial_number = ?\n" +
+                            ");"
+            );
+            statement.setString(1, device.getSerialNumber());
+            ResultSet result = statement.executeQuery();
+
+            if (result.next()) {
+                rgbaStripData.setDatetime(result.getTimestamp("datetime"));
+                rgbaStripData.setRed(result.getInt("red"));
+                rgbaStripData.setGreen(result.getInt("green"));
+                rgbaStripData.setBlue(result.getInt("blue"));
+                rgbaStripData.setAlfa(result.getInt("alfa"));
+            }
+        } catch (SQLException e) {
+            logger.error("Ошибка при чтении из таблицы rgba: " + e.getMessage());
+        }
+
+        return rgbaStripData;
+    }
 
     @Override
     public ArrayList<RGBAStripData> getByDevice(AbstractDevice device) {
