@@ -40,7 +40,6 @@ public class House {
     }
 
     public void removeDevice(AbstractDevice abstractDevice) {
-        //Не удаляет связанные дейвайсы
         devices.remove(abstractDevice.getSerialNumber());
         deviceDao.delete(abstractDevice.getSerialNumber());
     }

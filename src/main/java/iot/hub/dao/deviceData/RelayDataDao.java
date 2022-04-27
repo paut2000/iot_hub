@@ -28,7 +28,7 @@ public class RelayDataDao extends AbstractDao implements IDeviceDataDao {
             statement = connection.prepareStatement(
                     "SELECT datetime, status FROM relay\n" +
                             "INNER JOIN devices ON relay.device_id = devices.id\n" +
-                            "WHERE serial_number = ?"
+                            "WHERE serial_number = ? ORDER BY datetime"
             );
             statement.setString(1, device.getSerialNumber());
             ResultSet result = statement.executeQuery();

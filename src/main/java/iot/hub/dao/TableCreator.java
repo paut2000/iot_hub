@@ -62,6 +62,7 @@ public class TableCreator implements CommandLineRunner {
                             "    device_id INTEGER,\n" +
                             "    CONSTRAINT pk_relay PRIMARY KEY (id),\n" +
                             "    CONSTRAINT fk_device FOREIGN KEY (device_id) REFERENCES devices (id)\n" +
+                            "    ON DELETE CASCADE\n" +
                             ")"
             );
             statement.executeUpdate();
@@ -83,6 +84,7 @@ public class TableCreator implements CommandLineRunner {
                             "    device_id INTEGER,\n" +
                             "    CONSTRAINT pk_rgba PRIMARY KEY (id),\n" +
                             "    CONSTRAINT fk_device FOREIGN KEY (device_id) REFERENCES devices (id)\n" +
+                            "    ON DELETE CASCADE\n" +
                             ")"
             );
             statement.executeUpdate();
@@ -102,6 +104,7 @@ public class TableCreator implements CommandLineRunner {
                             "    device_id INTEGER,\n" +
                             "    CONSTRAINT pk_dht PRIMARY KEY (id),\n" +
                             "    CONSTRAINT fk_device FOREIGN KEY (device_id) REFERENCES devices (id)\n" +
+                            "    ON DELETE CASCADE\n" +
                             ")"
             );
             statement.executeUpdate();

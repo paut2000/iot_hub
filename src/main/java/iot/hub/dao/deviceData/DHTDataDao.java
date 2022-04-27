@@ -54,7 +54,7 @@ public class DHTDataDao extends AbstractDao implements IDeviceDataDao {
             statement = connection.prepareStatement(
                     "SELECT datetime, temperature, humidity FROM dht\n" +
                             "INNER JOIN devices d on d.id = dht.device_id\n" +
-                            "WHERE serial_number = ?"
+                            "WHERE serial_number = ? ORDER BY datetime"
             );
             statement.setString(1, device.getSerialNumber());
             ResultSet result = statement.executeQuery();

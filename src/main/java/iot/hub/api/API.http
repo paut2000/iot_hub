@@ -36,3 +36,5 @@ Accept: application/json
 
 ###
 
+DELETE http://localhost:8080/api/house/relay-asghg48fafg
+

@@ -57,7 +57,7 @@ public class RGBADataDao extends AbstractDao implements IDeviceDataDao {
             statement = connection.prepareStatement(
                     "SELECT datetime, red, green, blue, alfa FROM rgba\n" +
                             "INNER JOIN devices d on d.id = rgba.device_id\n" +
-                            "WHERE serial_number = ?"
+                            "WHERE serial_number = ? ORDER BY datetime"
             );
             statement.setString(1, device.getSerialNumber());
             ResultSet result = statement.executeQuery();
