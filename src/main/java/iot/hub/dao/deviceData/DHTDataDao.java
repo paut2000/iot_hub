@@ -75,8 +75,36 @@ public class DHTDataDao extends AbstractDao implements IDeviceDataDao {
     }
 
     @Override
-    public ArrayList<DHTData> getByDeviceForPeriod(AbstractDevice device, Timestamp datetime) {
-        return null;
+    public ArrayList<DHTData> getByDeviceForPeriod(AbstractDevice device, Timestamp timestampStart, Timestamp timestampEnd) {
+        ArrayList<DHTData> resultArrayList = new ArrayList<>();
+
+        try {
+            statement = connection.prepareStatement(
+                    "SELECT datetime, temperature, humidity FROM dht\n" +
+                            "INNER JOIN devices d on d.id = dht.device_id\n" +
+                            "WHERE serial_number = ?\n" +
+                            "AND datetime > ? AND datetime < ?\n" +
+                            "ORDER BY datetime;"
+            );
+            statement.setString(1, device.getSerialNumber());
+            statement.setTimestamp(2, timestampStart);
+            statement.setTimestamp(3, timestampEnd);
+
+            ResultSet result = statement.executeQuery();
+
+            while (result.next()) {
+                DHTData dhtData = new DHTData(
+                        result.getTimestamp("datetime"),
+                        result.getDouble("humidity"),
+                        result.getDouble("temperature")
+                );
+                resultArrayList.add(dhtData);
+            }
+        } catch (SQLException e) {
+            logger.error("Ошибка при чтении из таблицы DHT: " + e.getMessage());
+        }
+
+        return resultArrayList;
     }
 
     @Override

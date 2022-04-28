@@ -80,8 +80,36 @@ public class RGBADataDao extends AbstractDao implements IDeviceDataDao {
     }
 
     @Override
-    public ArrayList<RGBAStripData> getByDeviceForPeriod(AbstractDevice device, Timestamp datetime) {
-        return null;
+    public ArrayList<RGBAStripData> getByDeviceForPeriod(AbstractDevice device, Timestamp timestampStart, Timestamp timestampEnd) {
+        ArrayList<RGBAStripData> resultArrayList = new ArrayList<>();
+
+        try {
+            statement = connection.prepareStatement(
+                    "SELECT datetime, red, green, blue, alfa FROM rgba\n" +
+                            "INNER JOIN devices d on d.id = rgba.device_id\n" +
+                            "WHERE serial_number = ? AND datetime > ? AND datetime < ?\n" +
+                            "ORDER BY datetime;"
+            );
+            statement.setString(1, device.getSerialNumber());
+            statement.setTimestamp(2, timestampStart);
+            statement.setTimestamp(3, timestampEnd);
+            ResultSet result = statement.executeQuery();
+
+            while (result.next()) {
+                RGBAStripData rgbaStripData = new RGBAStripData(
+                        result.getTimestamp("datetime"),
+                        result.getInt("red"),
+                        result.getInt("green"),
+                        result.getInt("blue"),
+                        result.getInt("alfa")
+                );
+                resultArrayList.add(rgbaStripData);
+            }
+        } catch (SQLException e) {
+            logger.error("Ошибка при чтении из таблицы RGBA: " + e.getMessage());
+        }
+
+        return resultArrayList;
     }
 
     @Override

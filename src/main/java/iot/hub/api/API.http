@@ -1,5 +1,10 @@
 # curl -X GET http://192.168.0.3:8080/api/statistic/device-1
-GET http://localhost:8080/api/statistic/device-2
+GET http://localhost:8080/api/statistic/dht-asghg48fafg
+
+###
+
+GET http://localhost:8080/api/statistic/period/dht-asghg48fafg?start=2022-04-27 00:00:00.000000&end=2022-04-27 07:20:00.000000
+Content-Type: application/json
 
 ###
 

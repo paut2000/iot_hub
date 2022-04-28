@@ -73,9 +73,33 @@ public class RelayDataDao extends AbstractDao implements IDeviceDataDao {
     }
 
     @Override
-    public ArrayList<RelayData> getByDeviceForPeriod(AbstractDevice device, Timestamp datetime) {
+    public ArrayList<RelayData> getByDeviceForPeriod(AbstractDevice device, Timestamp timestampStart, Timestamp timestampEnd) {
+        ArrayList<RelayData> resultArrayList = new ArrayList<>();
 
-        return null;
+        try {
+            statement = connection.prepareStatement(
+                    "SELECT datetime, status FROM relay\n" +
+                            "INNER JOIN devices ON relay.device_id = devices.id\n" +
+                            "WHERE serial_number = ? AND datetime > ? AND datetime < ?\n" +
+                            "ORDER BY datetime;"
+            );
+            statement.setString(1, device.getSerialNumber());
+            statement.setTimestamp(2, timestampStart);
+            statement.setTimestamp(3, timestampEnd);
+            ResultSet result = statement.executeQuery();
+
+            while (result.next()) {
+                RelayData relayData = new RelayData(
+                        result.getTimestamp("datetime"),
+                        result.getBoolean("status")
+                );
+                resultArrayList.add(relayData);
+            }
+        } catch (SQLException e) {
+            logger.error("Ошибка при чтении из таблицы Relay: " + e.getMessage());
+        }
+
+        return resultArrayList;
     }
 
     @Override

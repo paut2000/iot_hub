@@ -10,7 +10,7 @@ public interface IDeviceDataDao {
 
     ArrayList<? extends AbstractData> getByDevice(AbstractDevice device);
     AbstractData getLastByDevice(AbstractDevice device);
-    ArrayList<? extends AbstractData> getByDeviceForPeriod(AbstractDevice device, Timestamp datetime);
+    ArrayList<? extends AbstractData> getByDeviceForPeriod(AbstractDevice device, Timestamp timestampStart, Timestamp timestampEnd);
 
     void save(AbstractDevice device);
 

@@ -64,6 +64,11 @@ public abstract class AbstractDevice {
         return dataDao.getByDevice(this);
     }
 
+    @JsonIgnore
+    public ArrayList<? extends AbstractData> getSampleForPeriod(Timestamp start, Timestamp end) {
+        return dataDao.getByDeviceForPeriod(this, start, end);
+    }
+
     // Вызывается со стороны МК
     public void changeData(AbstractData data) {
         this.data.changeData(data);
