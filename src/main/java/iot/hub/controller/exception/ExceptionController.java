@@ -1,5 +1,6 @@
 package iot.hub.controller.exception;
 
+import iot.hub.exception.DataAlreadyLikeThatException;
 import iot.hub.exception.DiedDeviceException;
 import iot.hub.exception.ResourceAlreadyExistException;
 import iot.hub.exception.ResourceNotFoundException;
@@ -14,7 +15,10 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @ControllerAdvice
 public class ExceptionController extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler(value = ResourceAlreadyExistException.class)
+    @ExceptionHandler(value = {
+            ResourceAlreadyExistException.class,
+            DataAlreadyLikeThatException.class
+    })
     public ResponseEntity<Response> handlerResourceAlreadyExistException(Exception exception) {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(new Response(exception.getMessage()));
     }

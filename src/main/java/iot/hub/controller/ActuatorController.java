@@ -1,5 +1,6 @@
 package iot.hub.controller;
 
+import iot.hub.exception.DataAlreadyLikeThatException;
 import iot.hub.exception.DiedDeviceException;
 import iot.hub.exception.ResourceNotFoundException;
 import iot.hub.model.House;
@@ -27,7 +28,7 @@ public class ActuatorController {
     @PostMapping("/control/actuator/disable/{deviceId}")
     public ResponseEntity<AbstractActuator> disable(
             @PathVariable String deviceId
-    ) throws ResourceNotFoundException, DiedDeviceException {
+    ) throws ResourceNotFoundException, DiedDeviceException, DataAlreadyLikeThatException {
         AbstractActuator actuator = (AbstractActuator) (house.getDevice(deviceId));
         actuator.disable();
         return ResponseEntity.status(HttpStatus.OK).body(actuator);
@@ -36,7 +37,7 @@ public class ActuatorController {
     @PostMapping("/control/actuator/enable/{deviceId}")
     public ResponseEntity<AbstractActuator> enable(
             @PathVariable String deviceId
-    ) throws ResourceNotFoundException, DiedDeviceException {
+    ) throws ResourceNotFoundException, DiedDeviceException, DataAlreadyLikeThatException {
         AbstractActuator actuator = (AbstractActuator) (house.getDevice(deviceId));
         actuator.enable();
         return ResponseEntity.status(HttpStatus.OK).body(actuator);

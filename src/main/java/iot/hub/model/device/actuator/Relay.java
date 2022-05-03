@@ -3,6 +3,7 @@ package iot.hub.model.device.actuator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import iot.hub.dao.deviceData.IDeviceDataDao;
+import iot.hub.exception.DataAlreadyLikeThatException;
 import iot.hub.exception.DiedDeviceException;
 import iot.hub.model.device.data.RelayData;
 import iot.hub.mqtt.MessagingService;
@@ -23,9 +24,12 @@ public class Relay extends AbstractActuator {
     }
 
     @Override
-    public void enable() throws DiedDeviceException {
+    public void enable() throws DiedDeviceException, DataAlreadyLikeThatException {
         if (alive == false) {
             throw new DiedDeviceException(serialNumber);
+        }
+        if (((RelayData) this.data).getStatus() == true) {
+            throw new DataAlreadyLikeThatException(serialNumber);
         }
         try {
             ((RelayData) this.data).setStatus(true);
@@ -38,9 +42,12 @@ public class Relay extends AbstractActuator {
     }
 
     @Override
-    public void disable() throws DiedDeviceException {
+    public void disable() throws DiedDeviceException, DataAlreadyLikeThatException {
         if (alive == false) {
             throw new DiedDeviceException(serialNumber);
+        }
+        if (((RelayData) this.data).getStatus() == false) {
+            throw new DataAlreadyLikeThatException(serialNumber);
         }
         try {
             ((RelayData) this.data).setStatus(false);

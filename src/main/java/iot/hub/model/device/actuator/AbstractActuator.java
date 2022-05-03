@@ -1,6 +1,7 @@
 package iot.hub.model.device.actuator;
 
 import iot.hub.dao.deviceData.IDeviceDataDao;
+import iot.hub.exception.DataAlreadyLikeThatException;
 import iot.hub.exception.DiedDeviceException;
 import iot.hub.model.device.AbstractDevice;
 import iot.hub.mqtt.MessagingService;
@@ -14,7 +15,7 @@ public abstract class AbstractActuator extends AbstractDevice {
     }
 
     // Вызываются со стороны REST API
-    abstract public void enable() throws DiedDeviceException;
-    abstract public void disable() throws DiedDeviceException;
+    abstract public void enable() throws DiedDeviceException, DataAlreadyLikeThatException;
+    abstract public void disable() throws DiedDeviceException, DataAlreadyLikeThatException;
 
 }
