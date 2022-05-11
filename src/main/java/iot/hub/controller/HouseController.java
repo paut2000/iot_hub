@@ -1,6 +1,5 @@
 package iot.hub.controller;
 
-import iot.hub.dao.DeviceDao;
 import iot.hub.exception.ResourceNotFoundException;
 import iot.hub.model.House;
 import iot.hub.model.device.AbstractDevice;

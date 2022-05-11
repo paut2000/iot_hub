@@ -37,7 +37,7 @@ public class MqttSubscriber implements CommandLineRunner {
     private void subscribeToNewDevice() {
         try {
 
-            messagingService.subscribe("/device/new", (t, p) -> {
+            messagingService.subscribe("/device/new/+", (t, p) -> {
                 NewDeviceMessage newDeviceMessage = new ObjectMapper()
                         .readerFor(NewDeviceMessage.class)
                         .readValue(p.toString());
