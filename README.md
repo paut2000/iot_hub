@@ -51,8 +51,19 @@ Used for recieve information about new devices added to the system.
 Used for recieve information about devices lost connection.
 
 ## UML-diagramm
+
 <img src="https://user-images.githubusercontent.com/48650232/175785489-13586720-51e1-4a25-994e-5680b55440bd.png" alt="drawing"/>
 
 1. Green - model
-1. Grey - ReST-controllers
-1. Blue - database-access layer
+2. Grey - ReST-controllers
+3. Blue - database-access layer
+4. Yellow - MQTT-client
+5. Red - exceptions
+6. Purple - messages
+
+## Entity relashion
+
+For mapping data from relational model to objective is used pattern "Data Mapper".
+
+<img src="https://user-images.githubusercontent.com/48650232/175785720-908c026a-4f57-46ca-b5ef-1272b67c4934.png" alt="drawing"/>
+
